@@ -96,6 +96,10 @@ function setTab(t) {
 }
 
 function drawTable() {
+  const isPortfolio = activeTab === 'all';
+  document.getElementById('kstrip').style.display   = isPortfolio ? '' : 'none';
+  document.getElementById('overview').style.display = isPortfolio ? '' : 'none';
+
   const search = document.getElementById('si').value.toLowerCase();
   const csmF = document.getElementById('fi-csm').value;
   const kamF = document.getElementById('fi-kam').value;
