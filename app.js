@@ -3,6 +3,53 @@ import { getScoreDetails, calcScore, getDays, getChurnRisk } from './score.js';
 
 let activeTab = 'all', sortCol = 'score', sortAsc = false;
 
+/* Écrit l'état courant des filtres dans l'URL sans rechargement */
+function syncURL() {
+  const params = new URLSearchParams();
+  const search = document.getElementById('si').value;
+  const csm    = document.getElementById('fi-csm').value;
+  const kam    = document.getElementById('fi-kam').value;
+  const tier   = document.getElementById('fi-tier').value;
+  const health = document.getElementById('fi-health').value;
+  if (search) params.set('search', search);
+  if (csm)    params.set('csm', csm);
+  if (kam)    params.set('kam', kam);
+  if (tier)   params.set('tier', tier);
+  if (health) params.set('health', health);
+  if (activeTab !== 'all') params.set('tab', activeTab);
+  const qs = params.toString();
+  history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+}
+
+/* Lit location.search au chargement et hydrate les filtres + onglet actif */
+function loadFromURL() {
+  const p = new URLSearchParams(location.search);
+  document.getElementById('si').value       = p.get('search') || '';
+  document.getElementById('fi-csm').value   = p.get('csm')    || '';
+  document.getElementById('fi-kam').value   = p.get('kam')    || '';
+  document.getElementById('fi-tier').value  = p.get('tier')   || '';
+  document.getElementById('fi-health').value = p.get('health') || '';
+  activeTab = p.get('tab') || 'all';
+  ['all', 'churn', 'renew', 'exp', 'ai'].forEach(x =>
+    document.getElementById('tab-' + x).classList.toggle('on', x === activeTab)
+  );
+}
+
+/* Remet tous les filtres à zéro et nettoie l'URL */
+function resetFilters() {
+  document.getElementById('si').value        = '';
+  document.getElementById('fi-csm').value    = '';
+  document.getElementById('fi-kam').value    = '';
+  document.getElementById('fi-tier').value   = '';
+  document.getElementById('fi-health').value = '';
+  activeTab = 'all';
+  ['all', 'churn', 'renew', 'exp', 'ai'].forEach(x =>
+    document.getElementById('tab-' + x).classList.toggle('on', x === 'all')
+  );
+  history.replaceState(null, '', location.pathname);
+  drawTable();
+}
+
 const sc = s => s >= 70 ? 'var(--green)' : s >= 40 ? 'var(--amber)' : 'var(--red)';
 const rc = r => r >= 50 ? 'var(--red)' : r >= 30 ? 'var(--amber)' : 'var(--green)';
 const bl = s => s >= 70 ? 'Sain' : s >= 40 ? 'Vigilance' : 'Risque';
@@ -26,6 +73,7 @@ function drawTable() {
   const kamF = document.getElementById('fi-kam').value;
   const tierF = document.getElementById('fi-tier').value;
   const hlF = document.getElementById('fi-health').value;
+  syncURL();
 
   let data = DB.filter(c => c.name.toLowerCase().includes(search) && (!csmF || c.csm === csmF) && (!kamF || c.kam === kamF) && (!tierF || c.tier === tierF));
   if (hlF) data = data.filter(c => { const s = calcScore(c); return hlF === 'g' ? s >= 70 : hlF === 'a' ? s >= 40 && s < 70 : s < 40; });
@@ -167,6 +215,7 @@ function closeDetails() {
   document.getElementById(id).addEventListener('input', drawTable);
   document.getElementById(id).addEventListener('change', drawTable);
 });
+loadFromURL();
 drawTable();
 
 window.setTab = setTab;
@@ -174,3 +223,4 @@ window.toggleSort = toggleSort;
 window.qa = qa;
 window.openDetails = openDetails;
 window.closeDetails = closeDetails;
+window.resetFilters = resetFilters;
