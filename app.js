@@ -68,11 +68,8 @@ function applyCurrentUser(name) {
   renderPriorities();
 }
 
-/* Bouton "Vue admin" : efface l'identité et repasse en vue globale */
+/* Bouton "Vue globale" : retire le filtre CSM sans effacer l'identité (au prochain reload, la vue personnelle revient) */
 function setAdminView() {
-  localStorage.removeItem('currentUser');
-  document.getElementById('user-select').value = '';
-  document.getElementById('admin-btn').style.display = 'none';
   document.getElementById('fi-csm').value = '';
   drawTable();
   renderPriorities();
