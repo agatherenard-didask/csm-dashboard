@@ -1,4 +1,4 @@
-import { DB } from './data.js';
+import { DB, csmWorkload } from './data.js';
 import { getScoreDetails, calcScore, getDays, getChurnRisk } from './score.js';
 
 let activeTab = 'all', sortCol = 'score', sortAsc = false;
@@ -87,6 +87,7 @@ function drawTable() {
     if (sortCol === 'mrr')   return sortAsc ? a.mrr - b.mrr : b.mrr - a.mrr;
     return 0;
   });
+  updateCharts(data, csmF);
 
   const allC = DB.filter(c => getChurnRisk(c, calcScore(c)).tot >= 50).length;
   const allR = DB.filter(c => getDays(c.end) <= 120).length;
@@ -209,6 +210,97 @@ function openDetails(id, e) {
 function closeDetails() {
   document.getElementById('sp').classList.remove('open');
   document.getElementById('overlay').style.display = 'none';
+}
+
+/* ─── CHARTS ─── */
+let chartHealth = null, chartChurn = null, chartCsmStack = null, chartWorkload = null;
+
+function healthOpts(data) {
+  const g = data.filter(c => calcScore(c) >= 70).length;
+  const a = data.filter(c => { const s = calcScore(c); return s >= 40 && s < 70; }).length;
+  const r = data.filter(c => calcScore(c) < 40).length;
+  return {
+    chart:       { type: 'donut', height: 200, fontFamily: "'DM Sans',sans-serif", toolbar: { show: false } },
+    series:      [g, a, r],
+    labels:      ['Sain', 'Vigilance', 'Risque'],
+    colors:      ['#10b981', '#f9b494', '#ef4444'],
+    legend:      { position: 'right', fontSize: '11px', markers: { width: 8, height: 8, offsetY: 1 } },
+    plotOptions: { pie: { donut: { size: '68%', labels: { show: true, total: { show: true, label: 'Total', fontSize: '11px', color: '#8892a4', fontWeight: 600 } } } } },
+    dataLabels:  { enabled: false },
+    stroke:      { width: 0 },
+  };
+}
+
+function churnOpts(data) {
+  const top5 = [...data]
+    .sort((a, b) => getChurnRisk(b, calcScore(b)).tot - getChurnRisk(a, calcScore(a)).tot)
+    .slice(0, 5);
+  return {
+    chart:       { type: 'bar', height: 200, fontFamily: "'DM Sans',sans-serif", toolbar: { show: false } },
+    series:      [{ name: 'Risque churn', data: top5.map(c => getChurnRisk(c, calcScore(c)).tot) }],
+    xaxis:       { categories: top5.map(c => c.name) },
+    yaxis:       { max: 100 },
+    colors:      ['#ef4444'],
+    plotOptions: { bar: { horizontal: true, borderRadius: 4 } },
+    dataLabels:  { enabled: false },
+    tooltip:     { y: { formatter: v => v + '/100' } },
+    grid:        { borderColor: '#e5e9f0' },
+  };
+}
+
+function csmStackOpts(data) {
+  const csms = [...new Set(data.map(c => c.csm))].sort();
+  return {
+    chart:       { type: 'bar', height: 200, stacked: true, fontFamily: "'DM Sans',sans-serif", toolbar: { show: false } },
+    series: [
+      { name: 'Sain',      data: csms.map(csm => data.filter(c => c.csm === csm && calcScore(c) >= 70).length) },
+      { name: 'Vigilance', data: csms.map(csm => data.filter(c => c.csm === csm && calcScore(c) >= 40 && calcScore(c) < 70).length) },
+      { name: 'Risque',    data: csms.map(csm => data.filter(c => c.csm === csm && calcScore(c) < 40).length) },
+    ],
+    xaxis:       { categories: csms },
+    colors:      ['#10b981', '#f9b494', '#ef4444'],
+    plotOptions: { bar: { borderRadius: 3 } },
+    dataLabels:  { enabled: false },
+    legend:      { show: false },
+    grid:        { borderColor: '#e5e9f0' },
+    yaxis:       { tickAmount: 3, labels: { formatter: v => Math.round(v) } },
+  };
+}
+
+function workloadOpts(csmF) {
+  const entries = Object.entries(csmWorkload)
+    .filter(([name]) => !csmF || name.startsWith(csmF))
+    .sort((a, b) => b[1] - a[1]);
+  const maxVal = entries.length ? Math.max(...entries.map(([, v]) => v)) * 1.25 : 150;
+  return {
+    chart:       { type: 'bar', height: 200, fontFamily: "'DM Sans',sans-serif", toolbar: { show: false } },
+    series:      [{ name: 'Workload', data: entries.map(([, v]) => v) }],
+    xaxis:       { categories: entries.map(([name]) => name) },
+    colors:      ['#f9b494'],
+    plotOptions: { bar: { borderRadius: 4, dataLabels: { position: 'top' } } },
+    dataLabels:  { enabled: true, offsetY: -18, formatter: v => v, style: { fontWeight: '700', colors: ['#1a1a1a'], fontSize: '11px' } },
+    legend:      { show: false },
+    grid:        { borderColor: '#e5e9f0' },
+    yaxis:       { show: false, max: maxVal },
+  };
+}
+
+function updateCharts(data, csmF) {
+  if (!chartHealth) {
+    chartHealth   = new ApexCharts(document.getElementById('chart-health'),   healthOpts(data));
+    chartChurn    = new ApexCharts(document.getElementById('chart-churn'),    churnOpts(data));
+    chartCsmStack = new ApexCharts(document.getElementById('chart-csm'),      csmStackOpts(data));
+    chartWorkload = new ApexCharts(document.getElementById('chart-workload'), workloadOpts(csmF));
+    chartHealth.render();
+    chartChurn.render();
+    chartCsmStack.render();
+    chartWorkload.render();
+    return;
+  }
+  chartHealth.updateSeries(healthOpts(data).series);
+  chartChurn.updateOptions(churnOpts(data), false, false);
+  chartCsmStack.updateOptions(csmStackOpts(data), false, false);
+  chartWorkload.updateOptions(workloadOpts(csmF), false, false);
 }
 
 ['si','fi-csm','fi-kam','fi-tier','fi-health'].forEach(id => {

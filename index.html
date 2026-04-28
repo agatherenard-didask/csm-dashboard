@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Didask · CSM Intelligence</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
 </head>
@@ -137,6 +138,28 @@
   <div class="kcrd"><div class="klbl"><span class="kdot" style="background:var(--red);"></span>À risque de churn</div><div class="kval" id="kp-r" style="color:var(--red);">—</div><div class="ksub" id="kp-rp">—</div></div>
   <div class="kcrd"><div class="klbl">Opportunités upsell</div><div class="kval" id="kp-up" style="color:var(--green);">—</div><div class="ksub">comptes au-dessus du contrat</div></div>
 </div>
+
+<!-- ══ OVERVIEW ══ -->
+<section style="max-width:1440px;margin:14px auto 0;padding:0 32px;">
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div class="bg-white rounded-2xl shadow-sm p-6">
+      <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Répartition santé</p>
+      <div id="chart-health"></div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm p-6">
+      <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Top 5 risque churn</p>
+      <div id="chart-churn"></div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm p-6">
+      <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Portefeuille par CSM</p>
+      <div id="chart-csm"></div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm p-6">
+      <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">CSMs Workload</p>
+      <div id="chart-workload"></div>
+    </div>
+  </div>
+</section>
 
 <!-- ══ TABLE ══ -->
 <main style="padding-bottom:40px;">

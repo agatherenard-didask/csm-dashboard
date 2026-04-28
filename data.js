@@ -1,3 +1,12 @@
+// MOCK — à remplacer par fetch direct de la propriété HubSpot "csm_workload" (déjà calculée côté HubSpot, ne pas recalculer côté dashboard)
+export const csmWorkload = {
+  "Agathe Renard":   123,
+  "Antoine Michon":   94,
+  "Florian Guillot":  95,
+  "Adeline X":        87,
+  "Alexandre Y":     110,
+};
+
 export const DB = [
   {id:"1",name:"Uptoo",       tier:"Premium", csm:"Agathe",   kam:"Marion",  pulse:5,start:"01/01/2026",end:"31/12/2026",uLog:2, lLog:1, meet:10, next:"15/06/2026",aiAct:true, aiMsg:18,coachAct:false,coachMsg:0, trend:5,  seatsUsed:120,seatsContract:100,creditsUsed:450, creditsContract:500, mrr:4200, nps:72},
   {id:"2",name:"Clariane",    tier:"Premium", csm:"Adeline",  kam:"Valérie", pulse:2,start:"15/05/2025",end:"15/05/2026",uLog:45,lLog:60,meet:65, next:null,         aiAct:true, aiMsg:3, coachAct:false,coachMsg:0, trend:-12,seatsUsed:45, seatsContract:50, creditsUsed:100, creditsContract:200, mrr:6500, nps:34},
