@@ -51,6 +51,7 @@ function resetFilters() {
   );
   history.replaceState(null, '', location.pathname);
   drawTable();
+  renderPriorities();
 }
 
 /* Sélection "Je suis…" : stocke l'identité et applique le filtre CSM */
@@ -64,6 +65,7 @@ function applyCurrentUser(name) {
   }
   document.getElementById('fi-csm').value = name;
   drawTable();
+  renderPriorities();
 }
 
 /* Bouton "Vue admin" : efface l'identité et repasse en vue globale */
@@ -73,6 +75,7 @@ function setAdminView() {
   document.getElementById('admin-btn').style.display = 'none';
   document.getElementById('fi-csm').value = '';
   drawTable();
+  renderPriorities();
 }
 
 const sc = s => s >= 70 ? 'var(--green)' : s >= 40 ? 'var(--amber)' : 'var(--red)';
@@ -328,6 +331,58 @@ function updateCharts(data, csmF) {
   chartWorkload.updateOptions(workloadOpts(csmF), false, false);
 }
 
+/* ─── PRIORITIES ─── */
+const DISMISS_TTL = 24 * 60 * 60 * 1000;
+
+function isDismissed(id) {
+  const ts = localStorage.getItem('p_' + id);
+  return ts && (Date.now() - parseInt(ts)) < DISMISS_TTL;
+}
+
+function dismissPriority(id) {
+  localStorage.setItem('p_' + id, Date.now());
+  renderPriorities();
+}
+
+function getPriorities() {
+  const user = localStorage.getItem('currentUser');
+  const pool = user ? DB.filter(c => c.csm === user) : DB;
+  const results = [];
+  for (const c of pool) {
+    if (isDismissed(c.id) || results.length >= 5) continue;
+    const s = calcScore(c), ro = getChurnRisk(c, s), dl = getDays(c.end);
+    if (ro.tot >= 70 && !c.next)
+      results.push({ c, reason: `Risque churn ${ro.tot}/100 et aucun prochain RDV planifié.` });
+    else if (dl < 60 && s < 70)
+      results.push({ c, reason: `Renouvellement dans ${dl}j avec un health score de ${s}/100.` });
+    else if (c.tier === 'Premium' && c.meet > 30)
+      results.push({ c, reason: `Compte Premium sans RDV depuis ${c.meet}j (seuil 30j).` });
+    else if (c.seatsUsed > c.seatsContract || c.creditsUsed > c.creditsContract) {
+      const what = c.seatsUsed > c.seatsContract ? 'sièges' : 'crédits';
+      const ratio = what === 'sièges' ? `${c.seatsUsed}/${c.seatsContract}` : `${c.creditsUsed}/${c.creditsContract}`;
+      results.push({ c, reason: `Opportunité upsell : ${what} dépassés (${ratio}).` });
+    }
+  }
+  return results;
+}
+
+function renderPriorities() {
+  const items = getPriorities();
+  const bar = document.getElementById('pbar');
+  if (!items.length) { bar.style.display = 'none'; return; }
+  bar.style.display = '';
+  document.getElementById('plist').innerHTML = items.map(({ c, reason }) =>
+    `<div style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;min-width:200px;flex:1;max-width:380px;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.name}</div>
+        <div style="font-size:11px;color:var(--slate);margin-top:2px;line-height:1.4;">${reason}</div>
+      </div>
+      <button class="detb" onclick="openDetails('${c.id}',event)" style="flex-shrink:0;">Voir →</button>
+      <button class="qab" onclick="dismissPriority('${c.id}')" title="Marquer comme traité" style="flex-shrink:0;font-size:11px;padding:5px 8px;">✓</button>
+    </div>`
+  ).join('');
+}
+
 ['si','fi-csm','fi-kam','fi-tier','fi-health'].forEach(id => {
   document.getElementById(id).addEventListener('input', drawTable);
   document.getElementById(id).addEventListener('change', drawTable);
@@ -340,6 +395,7 @@ if (_savedUser) {
   document.getElementById('admin-btn').style.display = '';
 }
 drawTable();
+renderPriorities();
 
 window.setTab = setTab;
 window.toggleSort = toggleSort;
@@ -349,3 +405,4 @@ window.closeDetails = closeDetails;
 window.resetFilters = resetFilters;
 window.applyCurrentUser = applyCurrentUser;
 window.setAdminView = setAdminView;
+window.dismissPriority = dismissPriority;

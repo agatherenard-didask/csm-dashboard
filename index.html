@@ -100,6 +100,12 @@
       </div>
     </div>
   </div>
+  <div id="pbar" style="display:none;border-top:1px solid var(--line);">
+    <div style="max-width:1440px;margin:0 auto;padding:10px 32px;">
+      <p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--slate);margin-bottom:8px;">🎯 Tes priorités du jour</p>
+      <div id="plist" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+    </div>
+  </div>
   <div class="tabs">
     <button class="tab on" id="tab-all"   onclick="setTab('all')">Portefeuille Actif</button>
     <button class="tab"    id="tab-churn" onclick="setTab('churn')">Alertes Churn <span class="tpill" id="pill-churn" style="background:var(--red-bg);color:var(--red);">0</span></button>
