@@ -103,6 +103,7 @@ function drawTable() {
   const tierF = document.getElementById('fi-tier').value;
   const hlF = document.getElementById('fi-health').value;
   syncURL();
+  updateFilterBar();
 
   let data = DB.filter(c => c.name.toLowerCase().includes(search) && (!csmF || c.csm === csmF) && (!kamF || c.kam === kamF) && (!tierF || c.tier === tierF));
   if (hlF) data = data.filter(c => { const s = calcScore(c); return hlF === 'g' ? s >= 70 : hlF === 'a' ? s >= 40 && s < 70 : s < 40; });
@@ -239,6 +240,27 @@ function openDetails(id, e) {
 function closeDetails() {
   document.getElementById('sp').classList.remove('open');
   document.getElementById('overlay').style.display = 'none';
+}
+
+/* ─── FILTER BAR STATE ─── */
+function updateFilterBar() {
+  const search = document.getElementById('si').value;
+  const filterIds = ['fi-csm', 'fi-kam', 'fi-tier', 'fi-health'];
+  let count = search ? 1 : 0;
+  filterIds.forEach(id => {
+    const el = document.getElementById(id);
+    const active = !!el.value;
+    if (active) count++;
+    el.closest('.fsel-wrap').classList.toggle('active', active);
+  });
+  document.getElementById('si').classList.toggle('active', !!search);
+  const btn = document.getElementById('reset-btn');
+  const counter = document.getElementById('filter-count');
+  counter.textContent = `(${count} filtre${count > 1 ? 's' : ''} actif${count > 1 ? 's' : ''})`;
+  counter.style.display = count > 0 ? '' : 'none';
+  btn.style.opacity = count > 0 ? '1' : '0.4';
+  btn.style.cursor = count > 0 ? 'pointer' : 'not-allowed';
+  btn.style.pointerEvents = count > 0 ? '' : 'none';
 }
 
 /* ─── CHARTS ─── */

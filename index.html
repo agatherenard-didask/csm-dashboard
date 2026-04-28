@@ -118,32 +118,35 @@
 <!-- ══ TOOLBAR ══ -->
 <div id="toolbar">
   <div class="tbinner">
+    <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#94a3b8;white-space:nowrap;">Filtres</span>
+    <div class="tsep"></div>
     <div class="srchwrap">
       <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6" stroke="#8892a4" stroke-width="2"/><path d="M14 14l3 3" stroke="#8892a4" stroke-width="2" stroke-linecap="round"/></svg>
       <input class="sinput" type="text" id="si" placeholder="Rechercher un compte…">
     </div>
     <div class="tsep"></div>
-    <select class="fsel" id="fi-csm">
+    <div class="fsel-wrap"><select class="fsel" id="fi-csm">
       <option value="">Tous les CSM</option>
       <option>Adeline</option><option>Agathe</option><option>Alexandre</option><option>Antoine</option><option>Florian</option>
-    </select>
-    <select class="fsel" id="fi-kam">
+    </select></div>
+    <div class="fsel-wrap"><select class="fsel" id="fi-kam">
       <option value="">Tous les KAM</option>
       <option>Marion</option><option>Valérie</option>
-    </select>
-    <select class="fsel" id="fi-tier">
+    </select></div>
+    <div class="fsel-wrap"><select class="fsel" id="fi-tier">
       <option value="">Tous les accompagnements</option>
       <option>Premium</option><option>Standard</option><option>Light</option>
-    </select>
+    </select></div>
     <div class="tsep"></div>
-    <select class="fsel" id="fi-health">
+    <div class="fsel-wrap"><select class="fsel" id="fi-health">
       <option value="">Tous statuts</option>
       <option value="g">Sains (≥70)</option>
       <option value="a">Vigilance (40-69)</option>
       <option value="r">À risque (&lt;40)</option>
-    </select>
+    </select></div>
     <div class="tsep"></div>
-    <button class="fsel" onclick="resetFilters()" style="cursor:pointer;color:var(--slate);background:var(--bg);">✕ Réinitialiser</button>
+    <button id="reset-btn" class="fsel" onclick="resetFilters()" style="cursor:pointer;color:var(--slate);">✕ Réinitialiser</button>
+    <span id="filter-count" style="font-size:11px;color:var(--slate);display:none;"></span>
   </div>
 </div>
 
