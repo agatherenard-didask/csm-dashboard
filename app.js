@@ -1,0 +1,176 @@
+import { DB } from './data.js';
+import { getScoreDetails, calcScore, getDays, getChurnRisk } from './score.js';
+
+let activeTab = 'all', sortCol = 'score', sortAsc = false;
+
+const sc = s => s >= 70 ? 'var(--green)' : s >= 40 ? 'var(--amber)' : 'var(--red)';
+const rc = r => r >= 50 ? 'var(--red)' : r >= 30 ? 'var(--amber)' : 'var(--green)';
+const bl = s => s >= 70 ? 'Sain' : s >= 40 ? 'Vigilance' : 'Risque';
+const tchip = t => t === 'Premium' ? 'cp' : t === 'Standard' ? 'cs' : 'cl';
+const pct = (u, c) => Math.min(Math.round(u / c * 100), 150);
+const uc = p => p > 100 ? 'var(--green)' : p > 80 ? 'var(--amber)' : 'var(--blue)';
+function tr2(v) { return v > 0 ? `<span class="tu">↗ +${v}</span>` : v < 0 ? `<span class="td2">↘ ${v}</span>` : `<span class="teq">→ =</span>`; }
+function si2(col) { if (sortCol !== col) return `<span style="color:var(--line);font-size:10px;margin-left:3px;">↕</span>`; return sortAsc ? `<span style="color:var(--peach);font-size:10px;margin-left:3px;">↑</span>` : `<span style="color:var(--peach);font-size:10px;margin-left:3px;">↓</span>`; }
+function qa(action, name, e) { e.stopPropagation(); alert(`[Demo HubSpot] "${action}" → ${name}`); }
+function toggleSort(col) { sortAsc = sortCol === col ? !sortAsc : col === 'name'; sortCol = col; drawTable(); }
+
+function setTab(t) {
+  activeTab = t;
+  ['all', 'churn', 'renew', 'exp', 'ai'].forEach(x => document.getElementById('tab-' + x).classList.toggle('on', x === t));
+  drawTable();
+}
+
+function drawTable() {
+  const search = document.getElementById('si').value.toLowerCase();
+  const csmF = document.getElementById('fi-csm').value;
+  const kamF = document.getElementById('fi-kam').value;
+  const tierF = document.getElementById('fi-tier').value;
+  const hlF = document.getElementById('fi-health').value;
+
+  let data = DB.filter(c => c.name.toLowerCase().includes(search) && (!csmF || c.csm === csmF) && (!kamF || c.kam === kamF) && (!tierF || c.tier === tierF));
+  if (hlF) data = data.filter(c => { const s = calcScore(c); return hlF === 'g' ? s >= 70 : hlF === 'a' ? s >= 40 && s < 70 : s < 40; });
+  if (activeTab === 'churn') data = data.filter(c => getChurnRisk(c, calcScore(c)).tot >= 50);
+  if (activeTab === 'renew') data = data.filter(c => getDays(c.end) <= 120);
+  if (activeTab === 'exp')   data = data.filter(c => calcScore(c) >= 70 || c.seatsUsed > c.seatsContract || c.creditsUsed > c.creditsContract);
+  data.sort((a, b) => {
+    if (sortCol === 'name')  return sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+    if (sortCol === 'score') return sortAsc ? calcScore(a) - calcScore(b) : calcScore(b) - calcScore(a);
+    if (sortCol === 'risk')  return sortAsc ? getChurnRisk(a, calcScore(a)).tot - getChurnRisk(b, calcScore(b)).tot : getChurnRisk(b, calcScore(b)).tot - getChurnRisk(a, calcScore(a)).tot;
+    if (sortCol === 'mrr')   return sortAsc ? a.mrr - b.mrr : b.mrr - a.mrr;
+    return 0;
+  });
+
+  const allC = DB.filter(c => getChurnRisk(c, calcScore(c)).tot >= 50).length;
+  const allR = DB.filter(c => getDays(c.end) <= 120).length;
+  const avg = data.length ? Math.round(data.reduce((a, c) => a + calcScore(c), 0) / data.length) : 0;
+  const greens = DB.filter(c => calcScore(c) >= 70).length;
+  const ambers = DB.filter(c => { const s = calcScore(c); return s >= 40 && s < 70; }).length;
+  const reds   = DB.filter(c => calcScore(c) < 40).length;
+  const ups    = DB.filter(c => c.seatsUsed > c.seatsContract || c.creditsUsed > c.creditsContract).length;
+
+  document.getElementById('hk-churn').textContent = allC;
+  document.getElementById('hk-renew').textContent = allR;
+  document.getElementById('hk-score').innerHTML = `${avg}<sup>/100</sup>`;
+  document.getElementById('pill-churn').textContent = allC;
+  document.getElementById('pill-renew').textContent = allR;
+  document.getElementById('kp-tot').textContent = DB.length;
+  document.getElementById('kp-g').textContent = greens;
+  document.getElementById('kp-gp').textContent = `${Math.round(greens / DB.length * 100)}% du portefeuille`;
+  document.getElementById('kp-a').textContent = ambers;
+  document.getElementById('kp-ap').textContent = `${Math.round(ambers / DB.length * 100)}% du portefeuille`;
+  document.getElementById('kp-r').textContent = reds;
+  document.getElementById('kp-rp').textContent = `${Math.round(reds / DB.length * 100)}% du portefeuille`;
+  document.getElementById('kp-up').textContent = ups;
+
+  const thead = document.getElementById('thead');
+  if (activeTab === 'ai') {
+    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th style="text-align:center">🤖 Assistant IA</th><th style="text-align:center">🎽 Coach IA</th><th style="text-align:center">Health Score</th><th></th></tr>`;
+  } else if (activeTab === 'exp') {
+    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('mrr')">MRR ${si2('mrr')}</th><th>Sièges</th><th>Crédits</th><th></th></tr>`;
+  } else {
+    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th>Fin de contrat</th><th>Dernier RDV</th><th></th></tr>`;
+  }
+
+  const tbody = document.getElementById('tbody');
+  const em = document.getElementById('empty');
+  tbody.innerHTML = '';
+  if (!data.length) { em.style.display = 'block'; return; }
+  em.style.display = 'none';
+
+  data.forEach(c => {
+    const d = getScoreDetails(c), s = d.tot, ro = getChurnRisk(c, s), r = ro.tot, dl = getDays(c.end);
+    const scolor = sc(s), rcolor = rc(r);
+    const namecell = `<td><div style="font-size:15px;font-weight:700;letter-spacing:-.2px;">${c.name}</div><div style="font-size:10px;color:var(--slate);margin-top:2px;">${c.nps != null ? `NPS · <b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'NPS · n/a'}</div></td>`;
+    const teamcell = `<td><div style="display:flex;flex-direction:column;gap:3px;"><span class="chip ${tchip(c.tier)}">${c.tier}</span><span style="font-size:12px;font-weight:600;color:var(--peach-h);margin-top:2px;">${c.csm}</span><span style="font-size:11px;color:var(--slate);">KAM: ${c.kam}</span></div></td>`;
+    const stip = `<div class="tb"><div class="tt">Détail Health Score</div><div class="tr"><span>Sentiment CSM</span><span class="tv">${d.pp}/20</span></div><div class="tr"><span>Engagement</span><span class="tv">${d.ep}/40</span></div><div class="tr"><span>Relation</span><span class="tv">${d.rp}/30</span></div><div class="tr"><span>Proactivité</span><span class="tv">${d.pro}/10</span></div><div class="ttot"><span>Total</span><span style="color:${scolor}">${s}/100</span></div></div>`;
+    const scorecell = `<td><div class="tw" style="gap:7px;"><span style="font-size:16px;font-weight:700;color:${scolor};font-family:'DM Mono',monospace;">${s}</span><span style="font-size:10px;color:var(--slate);">/100</span>${tr2(c.trend)}<div class="sbar"><div class="sbarf" style="width:${s}%;background:${scolor};"></div></div>${stip}</div></td>`;
+    const rtip = `<div class="tb"><div class="tt">Pondération du risque</div><div class="tr"><span>Santé dégradée</span><span class="tv">${ro.hr}/60</span></div><div class="tr"><span>Urgence (${ro.dy}j restants)</span><span class="tv">${ro.tr}/40</span></div><div class="ttot"><span>Risque total</span><span style="color:${rcolor}">${r}/100</span></div></div>`;
+    const riskcell = `<td><div class="tw" style="gap:7px;"><span style="font-size:16px;font-weight:700;color:${rcolor};font-family:'DM Mono',monospace;">${r}</span><span style="font-size:10px;color:var(--slate);">/100</span><div class="sbar"><div class="sbarf" style="width:${r}%;background:${rcolor};"></div></div>${rtip}</div></td>`;
+    const qa_html = `<td><div class="rqa"><button class="qab" onclick="qa('Email','${c.name.replace(/'/g, "\\'")}',event)" title="Email">✉️</button><button class="qab" onclick="qa('Appel','${c.name.replace(/'/g, "\\'")}',event)" title="Appel">📞</button><button class="qab" onclick="qa('Note','${c.name.replace(/'/g, "\\'")}',event)" title="Note">📝</button><button class="detb" onclick="openDetails('${c.id}',event)">Fiche →</button></div></td>`;
+    const row = document.createElement('tr');
+    row.onclick = () => openDetails(c.id);
+    if (activeTab === 'ai') {
+      const aic = c.aiAct ? `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><span class="badge bg">Activé</span><span style="font-size:12px;font-weight:600;">${c.aiMsg} msg/u</span></div>` : `<span class="badge" style="background:var(--bg);color:var(--slate);">Inactif</span>`;
+      const coc = c.coachAct ? `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><span class="badge bp">Activé</span><span style="font-size:12px;font-weight:600;">${c.coachMsg} msg/u</span></div>` : `<span class="badge" style="background:var(--bg);color:var(--slate);">Inactif</span>`;
+      const sbadge = s >= 70 ? 'bg' : s >= 40 ? 'ba' : 'br';
+      row.innerHTML = namecell + teamcell + `<td style="text-align:center">${aic}</td><td style="text-align:center">${coc}</td><td style="text-align:center"><span class="badge ${sbadge}">${s}/100</span></td>` + qa_html;
+    } else if (activeTab === 'exp') {
+      const mrrcell = `<td><span class="mono" style="font-size:13px;font-weight:600;">${c.mrr.toLocaleString('fr-FR')} €</span></td>`;
+      const sp2 = pct(c.seatsUsed, c.seatsContract), cp2 = pct(c.creditsUsed, c.creditsContract);
+      const seatcell = `<td><div style="font-size:12px;margin-bottom:4px;"><b style="color:${uc(sp2)}">${c.seatsUsed}</b> / ${c.seatsContract}${sp2 > 100 ? '<span class="upsell">Upsell</span>' : ''}</div><div style="display:flex;align-items:center;gap:5px;"><div class="ubar"><div class="ubarf" style="width:${Math.min(sp2, 100)}%;background:${uc(sp2)};"></div></div><span style="font-size:10px;color:var(--slate);">${sp2}%</span></div></td>`;
+      const credcell = `<td><div style="font-size:12px;margin-bottom:4px;"><b style="color:${uc(cp2)}">${c.creditsUsed}</b> / ${c.creditsContract}${cp2 > 100 ? '<span class="upsell">Upsell</span>' : ''}</div><div style="display:flex;align-items:center;gap:5px;"><div class="ubar"><div class="ubarf" style="width:${Math.min(cp2, 100)}%;background:${uc(cp2)};"></div></div><span style="font-size:10px;color:var(--slate);">${cp2}%</span></div></td>`;
+      row.innerHTML = namecell + teamcell + scorecell + mrrcell + seatcell + credcell + qa_html;
+    } else {
+      const endAlert = dl <= 30 ? `<span class="badge br" style="margin-left:5px;font-size:9px;">${dl}j !</span>` : dl <= 120 ? `<span class="badge ba" style="margin-left:5px;font-size:9px;">${dl}j</span>` : '';
+      const endcell = `<td><span style="font-size:12px;font-weight:500;color:${dl <= 30 ? 'var(--red)' : dl <= 120 ? 'var(--amber)' : 'var(--slate)'};">${c.end}</span>${endAlert}</td>`;
+      const meetcell = `<td><span style="font-size:12px;font-weight:600;color:${c.meet <= d.mx ? 'var(--ink)' : 'var(--red)'};">${c.meet}j</span><span style="font-size:10px;color:var(--slate);"> · seuil ${d.mx}j</span></td>`;
+      row.innerHTML = namecell + teamcell + scorecell + riskcell + endcell + meetcell + qa_html;
+    }
+    tbody.appendChild(row);
+  });
+}
+
+function openDetails(id, e) {
+  if (e) e.stopPropagation();
+  const c = DB.find(x => x.id === id), d = getScoreDetails(c), s = d.tot, ro = getChurnRisk(c, s);
+  const sbadge = s >= 70 ? 'bg' : s >= 40 ? 'ba' : 'br';
+  document.getElementById('sp-chips').innerHTML = `<span class="chip ${tchip(c.tier)}">${c.tier}</span><span class="badge ${sbadge}">${bl(s)}</span>`;
+  document.getElementById('sp-name').textContent = c.name;
+  document.getElementById('sp-dates').innerHTML = `<span>📅 Début: <b>${c.start}</b></span><span>🏁 Fin: <b style="color:${getDays(c.end) <= 120 ? 'var(--red)' : 'inherit'}">${c.end}</b></span>`;
+  document.getElementById('sp-csm').textContent = c.csm;
+  document.getElementById('sp-kam').textContent = c.kam;
+
+  const ptc = pts => pts === 0 ? 'var(--red)' : 'var(--green)';
+  const rws = [
+    {lbl: 'Sentiment CSM',       sub: `Note: ${c.pulse}/5`,                              pts: d.pp,  mx: 20},
+    {lbl: 'Engagement',           sub: `Moy. connexion: ${d.avg.toFixed(0)}j`,            pts: d.ep,  mx: 40},
+    {lbl: `Relation (${c.tier})`, sub: `Dernier RDV: ${c.meet}j — seuil: ${d.mx}j`,      pts: d.rp,  mx: 30},
+    {lbl: 'Proactivité',         sub: `RDV planifié: ${c.next ? 'Oui' : 'Non'}`,         pts: d.pro, mx: 10},
+  ];
+  document.getElementById('sp-breakdown').innerHTML = rws.map(rw => `<div class="spsr"><div><div class="spsl">${rw.lbl}</div><div class="spsb">${rw.sub}</div></div><div class="spbw"><div class="spbt" style="width:80px;"><div class="spbf" style="width:${rw.mx ? rw.pts / rw.mx * 100 : 0}%;background:${ptc(rw.pts)};"></div></div><span style="font-family:'DM Mono',monospace;font-size:11px;color:${ptc(rw.pts)};width:38px;text-align:right;">${rw.pts}/${rw.mx}</span></div></div>`).join('');
+  document.getElementById('sp-total').textContent = `${s}/100`;
+
+  const srcs = [
+    {name: 'HubSpot',    icon: '🟠', status: c.meet < 999 ? `Dernier RDV: ${c.meet}j` : 'Non connecté', ok: c.meet < 90},
+    {name: 'Modjo',      icon: '🎧', status: c.pulse > 0 ? `Pulse: ${c.pulse}/5 · Appels trackés` : 'Pas de data', ok: c.pulse >= 3},
+    {name: 'Hyperline',  icon: '💜', status: c.mrr ? `MRR: ${c.mrr.toLocaleString('fr-FR')} €` : 'Non connecté', ok: !!c.mrr},
+    {name: 'Didask App', icon: '🧭', status: `Engagement: ${d.avg.toFixed(0)}j moy. connexion`, ok: d.avg <= 30},
+  ];
+  document.getElementById('sp-sources').innerHTML = srcs.map(src => `<div class="sprr" style="background:var(--bg);margin-bottom:6px;"><span style="font-size:11px;font-weight:600;">${src.icon} ${src.name}</span><span style="font-size:10px;font-weight:600;color:${src.ok ? 'var(--green)' : 'var(--amber)'};">${src.status}</span></div>`).join('');
+
+  document.getElementById('sp-ai').innerHTML    = c.aiAct    ? `<span style="color:var(--green);font-weight:700;">${c.aiMsg} msg/user</span>`    : `<span style="color:var(--slate);">Non déployé</span>`;
+  document.getElementById('sp-coach').innerHTML = c.coachAct ? `<span style="color:var(--purple);font-weight:700;">${c.coachMsg} msg/user</span>` : `<span style="color:var(--slate);">Non déployé</span>`;
+
+  document.getElementById('sp-usage').innerHTML = [{lbl:'Sièges',u:c.seatsUsed,ct:c.seatsContract},{lbl:'Crédits',u:c.creditsUsed,ct:c.creditsContract}].map(u => {
+    const p = pct(u.u, u.ct), col = uc(p);
+    return `<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="font-weight:600;">${u.lbl}</span><span><b style="color:${col};">${u.u}</b> / ${u.ct} — <span style="color:${col};font-weight:700;">${p}%</span>${p > 100 ? '<span class="upsell">Upsell</span>' : ''}</span></div><div class="ubar" style="height:6px;width:100%;"><div class="ubarf" style="width:${Math.min(p,100)}%;background:${col};"></div></div></div>`;
+  }).join('');
+
+  document.getElementById('sp-relation').innerHTML = [
+    {icon:'🤝', lbl:'Dernier meeting', val:`Il y a ${c.meet} jours${c.meet > d.mx ? ' <b style="color:var(--red);">(En retard)</b>' : ''}`, bg:'var(--bg)'},
+    {icon:'📅', lbl:'Prochain RDV',    val:c.next || '<b style="color:var(--red);">Non planifié ⚠</b>', bg:'#fdf6f3'},
+    {icon:'📊', lbl:'NPS Hyperline',   val:c.nps != null ? `<b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'Non disponible', bg:'var(--bg)'},
+  ].map(rel => `<div class="sprr" style="background:${rel.bg};"><span style="font-size:12px;font-weight:600;">${rel.icon} ${rel.lbl}</span><span style="font-size:12px;">${rel.val}</span></div>`).join('');
+
+  document.getElementById('sp-actions').innerHTML = ['✉️ Email','📞 Appel','📝 Note HubSpot','📋 Créer tâche','🔗 Ouvrir deal'].map(a => `<button onclick="qa('${a}','${c.name.replace(/'/g,"\\'")}',event)" style="padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;" onmouseover="this.style.cssText=this.style.cssText+'background:var(--peach);color:white;border-color:var(--peach);'" onmouseout="this.style.background='var(--bg)';this.style.color='var(--ink)';this.style.borderColor='var(--line)'">${a}</button>`).join('');
+
+  document.getElementById('sp').classList.add('open');
+  document.getElementById('overlay').style.display = 'block';
+}
+
+function closeDetails() {
+  document.getElementById('sp').classList.remove('open');
+  document.getElementById('overlay').style.display = 'none';
+}
+
+['si','fi-csm','fi-kam','fi-tier','fi-health'].forEach(id => {
+  document.getElementById(id).addEventListener('input', drawTable);
+  document.getElementById(id).addEventListener('change', drawTable);
+});
+drawTable();
+
+window.setTab = setTab;
+window.toggleSort = toggleSort;
+window.qa = qa;
+window.openDetails = openDetails;
+window.closeDetails = closeDetails;

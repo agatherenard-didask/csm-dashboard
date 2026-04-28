@@ -1,18 +1,151 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CSM Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Didask · CSM Intelligence</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100 text-gray-900 min-h-screen">
-  <div id="app" class="max-w-5xl mx-auto p-8">
-    <h1 class="text-3xl font-bold mb-6">CSM Dashboard</h1>
+<body>
+
+<div id="overlay" onclick="closeDetails()"></div>
+
+<!-- ══ SIDE PANEL ══ -->
+<div id="sp">
+  <div id="spscr">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+      <div>
+        <div id="sp-chips" style="display:flex;gap:6px;align-items:center;margin-bottom:8px;"></div>
+        <h2 id="sp-name" style="font-size:26px;font-weight:700;letter-spacing:-.5px;line-height:1.1;"></h2>
+        <div id="sp-dates" style="margin-top:6px;font-size:11px;color:var(--slate);display:flex;gap:16px;flex-wrap:wrap;"></div>
+      </div>
+      <button onclick="closeDetails()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);cursor:pointer;font-size:14px;color:var(--slate);flex-shrink:0;margin-left:12px;font-family:'DM Sans',sans-serif;">✕</button>
+    </div>
+    <div class="sps">
+      <div class="spst">Équipe Didask</div>
+      <div class="spg2">
+        <div class="sptile"><div class="sptl">CSM</div><div class="sptv" id="sp-csm" style="color:var(--peach-h);"></div></div>
+        <div class="sptile"><div class="sptl">KAM</div><div class="sptv" id="sp-kam"></div></div>
+      </div>
+    </div>
+    <div class="sps">
+      <div class="spst">Décomposition Health Score</div>
+      <div id="sp-breakdown" style="background:var(--bg);border-radius:12px;padding:12px 14px;"></div>
+      <div class="sptot">
+        <span style="font-size:12px;font-weight:600;color:rgba(255,255,255,.55);">Score Total</span>
+        <span id="sp-total" style="font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:var(--peach);"></span>
+      </div>
+    </div>
+    <div class="sps">
+      <div class="spst">Sources de données</div>
+      <div id="sp-sources"></div>
+    </div>
+    <div class="sps">
+      <div class="spst">Adoption IA Didask</div>
+      <div class="spg2">
+        <div class="sptile"><div class="sptl">🤖 Assistant IA</div><div id="sp-ai" class="sptv" style="margin-top:4px;"></div></div>
+        <div class="sptile"><div class="sptl">🎽 Coach IA</div><div id="sp-coach" class="sptv" style="margin-top:4px;"></div></div>
+      </div>
+    </div>
+    <div class="sps">
+      <div class="spst">Consommation contrat</div>
+      <div id="sp-usage" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+    <div class="sps">
+      <div class="spst">Relation &amp; Planning</div>
+      <div id="sp-relation"></div>
+    </div>
+    <div class="sps" style="margin-bottom:0;">
+      <div class="spst">Actions rapides → HubSpot</div>
+      <div id="sp-actions" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+    </div>
   </div>
-  <script type="module" src="data.js"></script>
-  <script type="module" src="score.js"></script>
-  <script type="module" src="app.js"></script>
+</div>
+
+<!-- ══ HEADER ══ -->
+<header id="hdr">
+  <div class="hdr-top">
+    <div class="logo">
+      <div class="logo-mark">🧭</div>
+      <span class="logo-name">Didask</span>
+      <div class="logo-sep"></div>
+      <span class="logo-tag">CSM Intelligence</span>
+    </div>
+    <div class="hdr-kpis">
+      <div class="hdr-kpi">
+        <div class="hdr-kpi-lbl">Alertes Churn</div>
+        <div class="hdr-kpi-val" id="hk-churn" style="color:var(--red);">—</div>
+      </div>
+      <div class="hdr-kpi">
+        <div class="hdr-kpi-lbl">Renouvellements &lt;120j</div>
+        <div class="hdr-kpi-val" id="hk-renew" style="color:var(--amber);">—</div>
+      </div>
+      <div class="hdr-kpi">
+        <div class="hdr-kpi-lbl">Health Score Moyen</div>
+        <div class="hdr-kpi-val" id="hk-score">—<sup>/100</sup></div>
+      </div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab on" id="tab-all"   onclick="setTab('all')">Portefeuille Actif</button>
+    <button class="tab"    id="tab-churn" onclick="setTab('churn')">Alertes Churn <span class="tpill" id="pill-churn" style="background:var(--red-bg);color:var(--red);">0</span></button>
+    <button class="tab"    id="tab-renew" onclick="setTab('renew')">Renouvellements <span class="tpill" id="pill-renew" style="background:var(--amber-bg);color:var(--amber);">0</span></button>
+    <button class="tab"    id="tab-exp"   onclick="setTab('exp')">Opportunités ✦</button>
+    <button class="tab"    id="tab-ai"    onclick="setTab('ai')">Adoption IA ✨</button>
+  </div>
+</header>
+
+<!-- ══ TOOLBAR ══ -->
+<div id="toolbar">
+  <div class="tbinner">
+    <div class="srchwrap">
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6" stroke="#8892a4" stroke-width="2"/><path d="M14 14l3 3" stroke="#8892a4" stroke-width="2" stroke-linecap="round"/></svg>
+      <input class="sinput" type="text" id="si" placeholder="Rechercher un compte…">
+    </div>
+    <div class="tsep"></div>
+    <select class="fsel" id="fi-csm">
+      <option value="">Tous les CSM</option>
+      <option>Adeline</option><option>Agathe</option><option>Alexandre</option><option>Antoine</option><option>Florian</option>
+    </select>
+    <select class="fsel" id="fi-kam">
+      <option value="">Tous les KAM</option>
+      <option>Marion</option><option>Valérie</option>
+    </select>
+    <select class="fsel" id="fi-tier">
+      <option value="">Tous les accompagnements</option>
+      <option>Premium</option><option>Standard</option><option>Light</option>
+    </select>
+    <div class="tsep"></div>
+    <select class="fsel" id="fi-health">
+      <option value="">Tous statuts</option>
+      <option value="g">Sains (≥70)</option>
+      <option value="a">Vigilance (40-69)</option>
+      <option value="r">À risque (&lt;40)</option>
+    </select>
+  </div>
+</div>
+
+<!-- ══ KPI STRIP ══ -->
+<div id="kstrip">
+  <div class="kcrd"><div class="klbl">Comptes actifs</div><div class="kval" id="kp-tot">—</div><div class="ksub">dans le portefeuille</div></div>
+  <div class="kcrd"><div class="klbl"><span class="kdot" style="background:var(--green);"></span>Comptes sains</div><div class="kval" id="kp-g" style="color:var(--green);">—</div><div class="ksub" id="kp-gp">—</div></div>
+  <div class="kcrd"><div class="klbl"><span class="kdot" style="background:var(--amber);"></span>En vigilance</div><div class="kval" id="kp-a" style="color:var(--amber);">—</div><div class="ksub" id="kp-ap">—</div></div>
+  <div class="kcrd"><div class="klbl"><span class="kdot" style="background:var(--red);"></span>À risque de churn</div><div class="kval" id="kp-r" style="color:var(--red);">—</div><div class="ksub" id="kp-rp">—</div></div>
+  <div class="kcrd"><div class="klbl">Opportunités upsell</div><div class="kval" id="kp-up" style="color:var(--green);">—</div><div class="ksub">comptes au-dessus du contrat</div></div>
+</div>
+
+<!-- ══ TABLE ══ -->
+<main style="padding-bottom:40px;">
+  <div id="twrap">
+    <div class="tcrd">
+      <table><thead id="thead"></thead><tbody id="tbody"></tbody></table>
+      <div id="empty" class="empty" style="display:none;">🔍 Aucun compte ne correspond aux filtres sélectionnés.</div>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="app.js"></script>
 </body>
 </html>
