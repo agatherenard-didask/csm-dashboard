@@ -74,6 +74,17 @@
       <div class="logo-sep"></div>
       <span class="logo-tag">CSM Intelligence</span>
     </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <select id="user-select" class="fsel" style="min-width:140px;" onchange="applyCurrentUser(this.value)">
+        <option value="">Je suis…</option>
+        <option>Adeline</option>
+        <option>Agathe</option>
+        <option>Alexandre</option>
+        <option>Antoine</option>
+        <option>Florian</option>
+      </select>
+      <button id="admin-btn" class="detb" onclick="setAdminView()" style="display:none;white-space:nowrap;">Vue admin</button>
+    </div>
     <div class="hdr-kpis">
       <div class="hdr-kpi">
         <div class="hdr-kpi-lbl">Alertes Churn</div>

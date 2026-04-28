@@ -35,18 +35,43 @@ function loadFromURL() {
   );
 }
 
-/* Remet tous les filtres à zéro et nettoie l'URL */
+/* Remet tous les filtres à zéro et nettoie l'URL + identité */
 function resetFilters() {
   document.getElementById('si').value        = '';
   document.getElementById('fi-csm').value    = '';
   document.getElementById('fi-kam').value    = '';
   document.getElementById('fi-tier').value   = '';
   document.getElementById('fi-health').value = '';
+  localStorage.removeItem('currentUser');
+  document.getElementById('user-select').value = '';
+  document.getElementById('admin-btn').style.display = 'none';
   activeTab = 'all';
   ['all', 'churn', 'renew', 'exp', 'ai'].forEach(x =>
     document.getElementById('tab-' + x).classList.toggle('on', x === 'all')
   );
   history.replaceState(null, '', location.pathname);
+  drawTable();
+}
+
+/* Sélection "Je suis…" : stocke l'identité et applique le filtre CSM */
+function applyCurrentUser(name) {
+  if (name) {
+    localStorage.setItem('currentUser', name);
+    document.getElementById('admin-btn').style.display = '';
+  } else {
+    localStorage.removeItem('currentUser');
+    document.getElementById('admin-btn').style.display = 'none';
+  }
+  document.getElementById('fi-csm').value = name;
+  drawTable();
+}
+
+/* Bouton "Vue admin" : efface l'identité et repasse en vue globale */
+function setAdminView() {
+  localStorage.removeItem('currentUser');
+  document.getElementById('user-select').value = '';
+  document.getElementById('admin-btn').style.display = 'none';
+  document.getElementById('fi-csm').value = '';
   drawTable();
 }
 
@@ -308,6 +333,12 @@ function updateCharts(data, csmF) {
   document.getElementById(id).addEventListener('change', drawTable);
 });
 loadFromURL();
+const _savedUser = localStorage.getItem('currentUser');
+if (_savedUser) {
+  document.getElementById('user-select').value = _savedUser;
+  document.getElementById('fi-csm').value      = _savedUser;
+  document.getElementById('admin-btn').style.display = '';
+}
 drawTable();
 
 window.setTab = setTab;
@@ -316,3 +347,5 @@ window.qa = qa;
 window.openDetails = openDetails;
 window.closeDetails = closeDetails;
 window.resetFilters = resetFilters;
+window.applyCurrentUser = applyCurrentUser;
+window.setAdminView = setAdminView;
