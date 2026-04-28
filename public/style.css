@@ -97,11 +97,11 @@ tbody tr:hover .rqa { opacity:1; }
 .tw { position:relative; display:inline-flex; align-items:center; }
 .tb { visibility:hidden; opacity:0; pointer-events:none; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(4px); background:#1a1f2e; color:#fff; border-radius:10px; padding:14px 16px; width:216px; box-shadow:0 8px 28px rgba(0,0,0,.22); z-index:200; transition:opacity .14s,transform .14s; border:1px solid rgba(255,255,255,.07); }
 .tw:hover .tb { visibility:visible; opacity:1; transform:translateX(-50%) translateY(0); }
-.tt { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:#8892a4; border-bottom:1px solid rgba(255,255,255,.08); padding-bottom:8px; margin-bottom:8px; text-align:center; }
+.tt { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--peach); border-bottom:1px solid rgba(255,255,255,.08); padding-bottom:8px; margin-bottom:8px; text-align:center; }
 .tr { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; font-size:11px; }
 .tr:last-child { margin-bottom:0; }
 .ttot { display:flex; justify-content:space-between; font-size:13px; font-weight:700; padding-top:8px; border-top:1px solid rgba(255,255,255,.08); margin-top:4px; }
-.tv { font-family:'DM Mono',monospace; font-size:11px; color:var(--peach); }
+.tv { font-family:'DM Mono',monospace; font-size:11px; color:#fff; }
 
 /* TRENDS */
 .tu { color:var(--green); font-size:11px; font-weight:600; }
