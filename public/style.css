@@ -142,7 +142,7 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
 .ctab:hover { background: var(--ink); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(15,23,42,.15); }
 
 /* ── TOOLTIP ── */
-.tw { position: relative; display: inline-flex; align-items: center; }
+.tw { position: relative; display: inline-flex; align-items: center; gap: 7px; }
 .tb { visibility: hidden; opacity: 0; pointer-events: none; position: fixed; background: #1a1f2e; color: #fff; border-radius: 10px; padding: 14px 16px; width: 216px; box-shadow: 0 8px 28px rgba(0,0,0,.22); z-index: 9999; transition: opacity 150ms var(--ease); border: 1px solid rgba(255,255,255,.07); }
 .tt { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--peach); border-bottom: 1px solid rgba(255,255,255,.08); padding-bottom: 8px; margin-bottom: 8px; text-align: center; }
 .tr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; font-size: 11px; }
@@ -174,12 +174,107 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
 .spsl { font-size: 11px; font-weight: 600; }
 .spsb { font-size: 10px; color: var(--slate); margin-top: 1px; }
 .spbw { display: flex; align-items: center; gap: 6px; }
-.spbt { height: 5px; background: var(--bar-bg); border-radius: 99px; flex: 1; overflow: hidden; }
+.spbt { height: 5px; background: var(--bar-bg); border-radius: 99px; width: 80px; flex: none; overflow: hidden; }
 .spbf { height: 100%; border-radius: 99px; }
 .sptot { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: var(--peach); border-radius: 10px; margin-top: 10px; }
-.sprr { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 8px; margin-bottom: 6px; }
+.sprr { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 8px; margin-bottom: 6px; background: var(--bg); }
 
 /* ── EMPTY STATE ── */
 .empty-state { padding: 80px 32px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .empty-title { font-size: 16px; font-weight: 700; color: var(--ink); margin: 0; line-height: 1.2; }
 .empty-sub { font-size: 13.5px; color: var(--slate); margin: 0; }
+
+/* ── SORT INDICATORS ── */
+.si-off { color: var(--slate); font-size: 10px; margin-left: 3px; opacity: .5; }
+.si-on  { color: var(--peach); font-size: 10px; margin-left: 3px; }
+
+/* ── UTILITY ── */
+.tc       { text-align: center; }
+.ta-r     { text-align: right; }
+.shrink-0 { flex-shrink: 0; }
+.text-red { color: var(--red); }
+
+/* ── CELL: Name ── */
+.cell-name { font-size: 15px; font-weight: 700; letter-spacing: -.2px; }
+.cell-sub  { font-size: 10px; color: var(--slate); margin-top: 2px; }
+
+/* ── CELL: Team ── */
+.cell-team { display: flex; flex-direction: column; gap: 3px; }
+.cell-csm  { font-size: 12px; font-weight: 600; color: var(--peach-h); margin-top: 2px; }
+.cell-kam  { font-size: 11px; color: var(--slate); }
+
+/* ── TOOLTIP LABELS ── */
+.tl       { color: var(--peach); }
+.ttot-val { color: #fff; }
+
+/* ── CELL: Score / Risk ── */
+.cell-score { font-size: 16px; font-weight: 700; font-family: 'DM Mono', monospace; }
+.cell-unit  { font-size: 10px; color: var(--slate); }
+
+/* ── CELL: AI tab ── */
+.cell-ai       { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.cell-ai-count { font-size: 12px; font-weight: 600; }
+.badge-off     { background: var(--bg); color: var(--slate); }
+
+/* ── CELL: MRR ── */
+.cell-mrr { font-size: 13px; font-weight: 600; }
+
+/* ── CELL: Usage ── */
+.cell-usage-hd  { font-size: 12px; margin-bottom: 4px; }
+.cell-usage-bar { display: flex; align-items: center; gap: 5px; }
+.cell-pct       { font-size: 10px; color: var(--slate); }
+
+/* ── CELL: End date ── */
+.badge-sm  { margin-left: 5px; font-size: 9px; }
+.cell-date { font-size: 12px; font-weight: 500; }
+
+/* ── CELL: Meet ── */
+.cell-meet     { font-size: 12px; font-weight: 600; }
+.cell-meet-sub { font-size: 10px; color: var(--slate); }
+
+/* ── CELL: Count (convs / tickets) ── */
+.cell-count { font-size: 15px; font-weight: 700; }
+
+/* ── SP SOURCES ── */
+.src-name   { font-size: 11px; font-weight: 600; }
+.src-status { font-size: 10px; font-weight: 600; }
+
+/* ── SP BREAKDOWN ── */
+.sp-score-val { font-family: 'DM Mono', monospace; font-size: 11px; width: 38px; text-align: right; }
+
+/* ── SP AI / COACH ── */
+.ai-on    { color: var(--green);  font-weight: 700; }
+.coach-on { color: var(--purple); font-weight: 700; }
+.ai-off   { color: var(--slate); }
+
+/* ── TICKETS ── */
+.ticket-empty     { font-size: 12px; color: var(--slate); padding: 6px 0 0; }
+.ticket-row       { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.ticket-date      { font-size: 10px; color: var(--slate); white-space: nowrap; flex-shrink: 0; }
+.ticket-topic     { font-size: 11px; font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ticket-pill      { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+.ticket-link      { font-size: 14px; color: var(--slate); text-decoration: none; flex-shrink: 0; line-height: 1; }
+.ticket-more-wrap { padding: 8px 0 0; }
+.ticket-more      { font-size: 11px; color: var(--blue); font-weight: 600; text-decoration: none; }
+
+/* ── SP USAGE ── */
+.usage-hd  { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
+.usage-lbl { font-weight: 600; }
+.usage-pct { font-weight: 700; }
+.ubar-lg   { height: 6px; width: 100%; }
+
+/* ── SP RELATION ── */
+.rel-lbl { font-size: 12px; font-weight: 600; }
+.rel-val { font-size: 12px; }
+
+/* ── SP ACTION BUTTONS ── */
+.sp-action-btn { padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; transition: all 120ms var(--ease); }
+.sp-action-btn:hover { background: var(--peach); color: white; border-color: var(--peach); }
+
+/* ── PRIORITY CARDS ── */
+.pcard        { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; min-width: 200px; flex: 1; max-width: 380px; }
+.pcard-body   { flex: 1; min-width: 0; }
+.pcard-name   { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pcard-reason { font-size: 11px; color: var(--slate); margin-top: 2px; line-height: 1.4; }
+.pcard .detb  { flex-shrink: 0; }
+.pcard .qab   { font-size: 11px; padding: 5px 8px; flex-shrink: 0; }
