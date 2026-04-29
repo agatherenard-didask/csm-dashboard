@@ -11,11 +11,13 @@ function syncURL() {
   const kam    = document.getElementById('fi-kam').value;
   const tier   = document.getElementById('fi-tier').value;
   const health = document.getElementById('fi-health').value;
+  const stage  = document.getElementById('fi-stage').value;
   if (search) params.set('search', search);
   if (csm)    params.set('csm', csm);
   if (kam)    params.set('kam', kam);
   if (tier)   params.set('tier', tier);
   if (health) params.set('health', health);
+  if (stage)  params.set('stage', stage);
   if (activeTab !== 'all') params.set('tab', activeTab);
   const qs = params.toString();
   history.replaceState(null, '', qs ? '?' + qs : location.pathname);
@@ -24,11 +26,12 @@ function syncURL() {
 /* Lit location.search au chargement et hydrate les filtres + onglet actif */
 function loadFromURL() {
   const p = new URLSearchParams(location.search);
-  document.getElementById('si').value       = p.get('search') || '';
-  document.getElementById('fi-csm').value   = p.get('csm')    || '';
-  document.getElementById('fi-kam').value   = p.get('kam')    || '';
-  document.getElementById('fi-tier').value  = p.get('tier')   || '';
+  document.getElementById('si').value        = p.get('search') || '';
+  document.getElementById('fi-csm').value    = p.get('csm')    || '';
+  document.getElementById('fi-kam').value    = p.get('kam')    || '';
+  document.getElementById('fi-tier').value   = p.get('tier')   || '';
   document.getElementById('fi-health').value = p.get('health') || '';
+  document.getElementById('fi-stage').value  = p.get('stage')  || '';
   activeTab = p.get('tab') || 'all';
   ['all', 'churn', 'renew', 'exp', 'ai'].forEach(x =>
     document.getElementById('tab-' + x).classList.toggle('on', x === activeTab)
@@ -42,6 +45,7 @@ function resetFilters() {
   document.getElementById('fi-kam').value    = '';
   document.getElementById('fi-tier').value   = '';
   document.getElementById('fi-health').value = '';
+  document.getElementById('fi-stage').value  = '';
   localStorage.removeItem('currentUser');
   document.getElementById('user-select').value = '';
   document.getElementById('admin-btn').style.display = 'none';
@@ -77,6 +81,7 @@ function setAdminView() {
 
 const sc = s => s >= 70 ? 'var(--green)' : s >= 40 ? 'var(--amber)' : 'var(--red)';
 const rc = r => r >= 50 ? 'var(--red)' : r >= 30 ? 'var(--amber)' : 'var(--green)';
+const lcStage = s => s === 'Kick off' ? 'lc-kickoff' : s === 'Onboarding' ? 'lc-onboarding' : s === 'Conception/diffusion' ? 'lc-conception' : 'lc-running';
 const bl = s => s >= 70 ? 'Sain' : s >= 40 ? 'Vigilance' : 'Risque';
 const tchip = t => t === 'Premium' ? 'cp' : t === 'Standard' ? 'cs' : 'cl';
 const pct = (u, c) => Math.min(Math.round(u / c * 100), 150);
@@ -114,15 +119,17 @@ function drawTable() {
   if (periodWrap) periodWrap.style.display = (activeTab === 'ai' || activeTab === 'exp') ? 'none' : '';
 
   const search = document.getElementById('si').value.toLowerCase();
-  const csmF = document.getElementById('fi-csm').value;
-  const kamF = document.getElementById('fi-kam').value;
-  const tierF = document.getElementById('fi-tier').value;
-  const hlF = document.getElementById('fi-health').value;
+  const csmF   = document.getElementById('fi-csm').value;
+  const kamF   = document.getElementById('fi-kam').value;
+  const tierF  = document.getElementById('fi-tier').value;
+  const hlF    = document.getElementById('fi-health').value;
+  const stageF = document.getElementById('fi-stage').value;
   syncURL();
   updateFilterBar();
 
   let data = DB.filter(c => c.name.toLowerCase().includes(search) && (!csmF || c.csm === csmF) && (!kamF || c.kam === kamF) && (!tierF || c.tier === tierF));
-  if (hlF) data = data.filter(c => { const s = calcScore(c); return hlF === 'g' ? s >= 70 : hlF === 'a' ? s >= 40 && s < 70 : s < 40; });
+  if (hlF)    data = data.filter(c => { const s = calcScore(c); return hlF === 'g' ? s >= 70 : hlF === 'a' ? s >= 40 && s < 70 : s < 40; });
+  if (stageF) data = data.filter(c => c.clientStage === stageF);
   if (activeTab === 'churn') data = data.filter(c => getChurnRisk(c, calcScore(c)).tot >= 50);
   if (activeTab === 'renew') data = data.filter(c => getDays(c.end) <= 120);
   if (activeTab === 'exp')   data = data.filter(c => calcScore(c) >= 70 || c.seatsUsed > c.seatsContract || c.creditsUsed > c.creditsContract);
@@ -164,7 +171,7 @@ function drawTable() {
   } else if (activeTab === 'exp') {
     thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('mrr')">MRR ${si2('mrr')}</th><th>Sièges</th><th>Crédits</th><th></th></tr>`;
   } else {
-    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th>Fin de contrat</th><th>Dernier RDV</th><th>Conversations</th><th>Tickets</th><th></th></tr>`;
+    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th>Fin de contrat</th><th>Dernier RDV</th><th>Statut</th><th>Conversations</th><th>Tickets</th><th></th></tr>`;
   }
 
   const tbody = document.getElementById('tbody');
@@ -204,9 +211,10 @@ function drawTable() {
       const meetcell = `<td><span class="cell-meet" style="color:${c.meet <= d.mx ? 'var(--ink)' : 'var(--red)'};">${c.meet}j</span><span class="cell-meet-sub"> · seuil ${d.mx}j</span></td>`;
       const convCount = filterSupport(c.supportConversations, c);
       const tickCount = filterSupport(c.supportTickets, c);
+      const stagecell = `<td><span class="badge ${lcStage(c.clientStage)}">${c.clientStage}</span></td>`;
       const convcell = `<td><span style="font-size:15px;font-weight:700;color:${convCount > 0 ? 'var(--ink)' : 'var(--slate)'};">${convCount}</span></td>`;
       const tickcell = `<td><span style="font-size:15px;font-weight:700;color:${tickCount > 0 ? 'var(--ink)' : 'var(--slate)'};">${tickCount}</span></td>`;
-      row.innerHTML = namecell + teamcell + scorecell + riskcell + endcell + meetcell + convcell + tickcell + qa_html;
+      row.innerHTML = namecell + teamcell + scorecell + riskcell + endcell + meetcell + stagecell + convcell + tickcell + qa_html;
     }
     tbody.appendChild(row);
   });
@@ -364,7 +372,7 @@ function closeDetails() {
 /* ─── FILTER BAR STATE ─── */
 function updateFilterBar() {
   const search = document.getElementById('si').value;
-  const filterIds = ['fi-csm', 'fi-kam', 'fi-tier', 'fi-health'];
+  const filterIds = ['fi-csm', 'fi-kam', 'fi-tier', 'fi-health', 'fi-stage'];
   let count = search ? 1 : 0;
   filterIds.forEach(id => {
     const el = document.getElementById(id);
@@ -585,3 +593,4 @@ window.setAdminView = setAdminView;
 window.dismissPriority = dismissPriority;
 window.setSupportPeriod = setSupportPeriod;
 window.setSPTab = setSPTab;
+window.drawTable = drawTable;

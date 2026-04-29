@@ -131,6 +131,15 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
 .br::before { background: var(--red-dot); }
 .bp { background: var(--purple-bg); color: var(--purple); }
 .bp::before { background: var(--purple); }
+/* ── LIFECYCLE STAGE PILLS ── */
+.lc-kickoff             { background: #fff0e6; color: #c2532a; }
+.lc-kickoff::before     { background: var(--peach-h); }
+.lc-onboarding          { background: #fef3c7; color: #b45309; }
+.lc-onboarding::before  { background: var(--amber-dot); }
+.lc-conception          { background: var(--blue-bg); color: var(--blue); }
+.lc-conception::before  { background: var(--blue); }
+.lc-running             { background: var(--green-bg); color: var(--green); }
+.lc-running::before     { background: var(--green-dot); }
 .upsell { background: #d1fae5; color: #065f46; padding: 1px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; text-transform: uppercase; margin-left: 5px; }
 
 /* ── BUTTONS ── */
