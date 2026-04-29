@@ -82,7 +82,7 @@ const tchip = t => t === 'Premium' ? 'cp' : t === 'Standard' ? 'cs' : 'cl';
 const pct = (u, c) => Math.min(Math.round(u / c * 100), 150);
 const uc = p => p > 100 ? 'var(--green)' : p > 80 ? 'var(--amber)' : 'var(--blue)';
 function tr2(v) { return v > 0 ? `<span class="tu">↗ +${v}</span>` : v < 0 ? `<span class="td2">↘ ${v}</span>` : `<span class="teq">→ =</span>`; }
-function si2(col) { if (sortCol !== col) return `<span style="color:var(--line);font-size:10px;margin-left:3px;">↕</span>`; return sortAsc ? `<span style="color:var(--peach);font-size:10px;margin-left:3px;">↑</span>` : `<span style="color:var(--peach);font-size:10px;margin-left:3px;">↓</span>`; }
+function si2(col) { if (sortCol !== col) return `<span style="color:var(--slate);font-size:10px;margin-left:3px;opacity:.5;">↕</span>`; return sortAsc ? `<span style="color:var(--peach);font-size:10px;margin-left:3px;">↑</span>` : `<span style="color:var(--peach);font-size:10px;margin-left:3px;">↓</span>`; }
 function qa(action, name, e) { e.stopPropagation(); alert(`[Demo HubSpot] "${action}" → ${name}`); }
 function toggleSort(col) { sortAsc = sortCol === col ? !sortAsc : col === 'name'; sortCol = col; drawTable(); }
 
@@ -192,8 +192,8 @@ function drawTable() {
     } else if (activeTab === 'exp') {
       const mrrcell = `<td><span class="mono" style="font-size:13px;font-weight:600;">${c.mrr.toLocaleString('fr-FR')} €</span></td>`;
       const sp2 = pct(c.seatsUsed, c.seatsContract), cp2 = pct(c.creditsUsed, c.creditsContract);
-      const seatcell = `<td><div style="font-size:12px;margin-bottom:4px;"><b style="color:${uc(sp2)}">${c.seatsUsed}</b> / ${c.seatsContract}${sp2 > 100 ? '<span class="upsell">Upsell</span>' : ''}</div><div style="display:flex;align-items:center;gap:5px;"><div class="ubar"><div class="ubarf" style="width:${Math.min(sp2, 100)}%;background:${uc(sp2)};"></div></div><span style="font-size:10px;color:var(--slate);">${sp2}%</span></div></td>`;
-      const credcell = `<td><div style="font-size:12px;margin-bottom:4px;"><b style="color:${uc(cp2)}">${c.creditsUsed}</b> / ${c.creditsContract}${cp2 > 100 ? '<span class="upsell">Upsell</span>' : ''}</div><div style="display:flex;align-items:center;gap:5px;"><div class="ubar"><div class="ubarf" style="width:${Math.min(cp2, 100)}%;background:${uc(cp2)};"></div></div><span style="font-size:10px;color:var(--slate);">${cp2}%</span></div></td>`;
+      const seatcell = `<td><div style="font-size:12px;margin-bottom:4px;"><b style="color:${uc(sp2)}">${c.seatsUsed.toLocaleString('fr-FR')}</b> / ${c.seatsContract.toLocaleString('fr-FR')}${sp2 > 100 ? '<span class="upsell">Upsell</span>' : ''}</div><div style="display:flex;align-items:center;gap:5px;"><div class="ubar"><div class="ubarf" style="width:${Math.min(sp2, 100)}%;background:${uc(sp2)};"></div></div><span style="font-size:10px;color:var(--slate);">${sp2}%</span></div></td>`;
+      const credcell = `<td><div style="font-size:12px;margin-bottom:4px;"><b style="color:${uc(cp2)}">${c.creditsUsed.toLocaleString('fr-FR')}</b> / ${c.creditsContract.toLocaleString('fr-FR')}${cp2 > 100 ? '<span class="upsell">Upsell</span>' : ''}</div><div style="display:flex;align-items:center;gap:5px;"><div class="ubar"><div class="ubarf" style="width:${Math.min(cp2, 100)}%;background:${uc(cp2)};"></div></div><span style="font-size:10px;color:var(--slate);">${cp2}%</span></div></td>`;
       row.innerHTML = namecell + teamcell + scorecell + mrrcell + seatcell + credcell + qa_html;
     } else {
       const endAlert = dl <= 30 ? `<span class="badge br" style="margin-left:5px;font-size:9px;">${dl}j !</span>` : dl <= 120 ? `<span class="badge ba" style="margin-left:5px;font-size:9px;">${dl}j</span>` : '';
@@ -264,7 +264,7 @@ function openDetails(id, e) {
 
   document.getElementById('sp-usage').innerHTML = [{lbl:'Sièges',u:c.seatsUsed,ct:c.seatsContract},{lbl:'Crédits',u:c.creditsUsed,ct:c.creditsContract}].map(u => {
     const p = pct(u.u, u.ct), col = uc(p);
-    return `<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="font-weight:600;">${u.lbl}</span><span><b style="color:${col};">${u.u}</b> / ${u.ct} — <span style="color:${col};font-weight:700;">${p}%</span>${p > 100 ? '<span class="upsell">Upsell</span>' : ''}</span></div><div class="ubar" style="height:6px;width:100%;"><div class="ubarf" style="width:${Math.min(p,100)}%;background:${col};"></div></div></div>`;
+    return `<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="font-weight:600;">${u.lbl}</span><span><b style="color:${col};">${u.u.toLocaleString('fr-FR')}</b> / ${u.ct.toLocaleString('fr-FR')} — <span style="color:${col};font-weight:700;">${p}%</span>${p > 100 ? '<span class="upsell">Upsell</span>' : ''}</span></div><div class="ubar" style="height:6px;width:100%;"><div class="ubarf" style="width:${Math.min(p,100)}%;background:${col};"></div></div></div>`;
   }).join('');
 
   document.getElementById('sp-relation').innerHTML = [
