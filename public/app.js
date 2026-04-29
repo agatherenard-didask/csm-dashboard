@@ -237,7 +237,7 @@ function openDetails(id, e) {
     {lbl: `Relation (${c.tier})`, sub: `Dernier RDV: ${c.meet}j — seuil: ${d.mx}j`,      pts: d.rp,  mx: 30},
     {lbl: 'Proactivité',         sub: `RDV planifié: ${c.next ? 'Oui' : 'Non'}`,         pts: d.pro, mx: 10},
   ];
-  document.getElementById('sp-breakdown').innerHTML = rws.map(rw => `<div class="spsr"><div><div class="spsl">${rw.lbl}</div><div class="spsb">${rw.sub}</div></div><div class="spbw"><div class="spbt" style="width:80px;"><div class="spbf" style="width:${rw.mx ? rw.pts / rw.mx * 100 : 0}%;background:${ptc(rw.pts)};"></div></div><span style="font-family:'DM Mono',monospace;font-size:11px;color:${ptc(rw.pts)};width:38px;text-align:right;">${rw.pts}/${rw.mx}</span></div></div>`).join('');
+  document.getElementById('sp-breakdown').innerHTML = rws.map(rw => `<div class="spsr"><div><div class="spsl">${rw.lbl}</div><div class="spsb">${rw.sub}</div></div><div class="spbw"><div class="spbt" style="width:80px;"><div class="spbf" style="width:${rw.mx ? rw.pts / rw.mx * 100 : 0}%;background:${ptc(rw.pts)};"></div></div><span style="font-family:'Inter',system-ui,sans-serif;font-variant-numeric:tabular-nums;font-feature-settings:'cv11','ss01';font-size:11px;color:${ptc(rw.pts)};width:38px;text-align:right;">${rw.pts}/${rw.mx}</span></div></div>`).join('');
   document.getElementById('sp-total').textContent = `${s}/100`;
 
   const srcs = [

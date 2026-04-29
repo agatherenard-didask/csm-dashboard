@@ -41,7 +41,7 @@ body {
   -webkit-font-smoothing: antialiased;
   font-feature-settings: 'cv11','ss01','ss03';
 }
-.mono { font-family: 'DM Mono', monospace; font-variant-numeric: tabular-nums; }
+.mono { font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-feature-settings: 'cv11', 'ss01'; }
 
 /* ── FOCUS RING ── */
 *:focus-visible { outline: 2px solid var(--peach); outline-offset: 2px; }
@@ -161,12 +161,12 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
 .tr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; font-size: 11px; }
 .tr:last-child { margin-bottom: 0; }
 .ttot { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.08); margin-top: 4px; }
-.tv { font-family: 'DM Mono', monospace; font-size: 11px; color: #fff; }
+.tv { font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-feature-settings: 'cv11', 'ss01'; font-size: 11px; color: #fff; }
 
 /* ── TRENDS ── */
-.tu  { color: var(--green-dot); font-size: 11px; font-weight: 600; }
-.td2 { color: var(--red-dot);   font-size: 11px; font-weight: 600; }
-.teq { color: var(--slate);     font-size: 11px; }
+.tu  { color: var(--green-dot); font-size: 11px; font-weight: 600; font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-feature-settings: 'cv11', 'ss01'; }
+.td2 { color: var(--red-dot);   font-size: 11px; font-weight: 600; font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-feature-settings: 'cv11', 'ss01'; }
+.teq { color: var(--slate);     font-size: 11px;                   font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-feature-settings: 'cv11', 'ss01'; }
 
 /* ── SIDE PANEL ── */
 #overlay { position: fixed; inset: 0; background: rgba(15,23,42,.12); backdrop-filter: blur(4px); z-index: 40; display: none; }
@@ -228,7 +228,7 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
 .ttot-val { color: #fff; }
 
 /* ── CELL: Score / Risk ── */
-.cell-score { font-size: 16px; font-weight: 700; font-family: 'DM Mono', monospace; }
+.cell-score { font-size: 16px; font-weight: 700; font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-feature-settings: 'cv11', 'ss01'; }
 .cell-unit  { font-size: 10px; color: var(--slate); }
 
 /* ── CELL: AI tab ── */
@@ -249,7 +249,7 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
 .cell-date { font-size: 12px; font-weight: 500; }
 
 /* ── CELL: Meet ── */
-.cell-meet     { font-size: 12px; font-weight: 600; }
+.cell-meet     { font-size: 12px; font-weight: 600; font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-feature-settings: 'cv11', 'ss01'; }
 .cell-meet-sub { font-size: 10px; color: var(--slate); }
 
 /* ── CELL: Count (convs / tickets) ── */
@@ -260,7 +260,7 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
 .src-status { font-size: 10px; font-weight: 600; }
 
 /* ── SP BREAKDOWN ── */
-.sp-score-val { font-family: 'DM Mono', monospace; font-size: 11px; width: 38px; text-align: right; }
+.sp-score-val { font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-feature-settings: 'cv11', 'ss01'; font-size: 11px; width: 38px; text-align: right; }
 
 /* ── SP AI / COACH ── */
 .ai-on    { color: var(--green);  font-weight: 700; }
@@ -315,9 +315,9 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
 .ob-dates-card     { background: var(--bg); border-radius: 10px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
 .ob-date-row       { display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
 .ob-date-lbl       { color: var(--slate); font-weight: 500; }
-.ob-date-val       { font-weight: 600; font-family: 'DM Mono', monospace; }
-.ob-delay-ok       { color: var(--peach-h); font-weight: 700; font-family: 'DM Mono', monospace; }
-.ob-delay-late     { color: var(--red);     font-weight: 700; font-family: 'DM Mono', monospace; }
+.ob-date-val       { font-weight: 600; font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-feature-settings: 'cv11', 'ss01'; }
+.ob-delay-ok       { color: var(--peach-h); font-weight: 700; font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-feature-settings: 'cv11', 'ss01'; }
+.ob-delay-late     { color: var(--red);     font-weight: 700; font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-feature-settings: 'cv11', 'ss01'; }
 .ob-delay-done     { color: var(--green);   font-weight: 700; }
 @keyframes ob-pulse {
   0%   { opacity: .55; transform: scale(1);   }
