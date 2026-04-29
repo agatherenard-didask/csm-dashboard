@@ -240,6 +240,28 @@ function openDetails(id, e) {
   document.getElementById('sp-ai').innerHTML    = c.aiAct    ? `<span style="color:var(--green);font-weight:700;">${c.aiMsg} msg/user</span>`    : `<span style="color:var(--slate);">Non déployé</span>`;
   document.getElementById('sp-coach').innerHTML = c.coachAct ? `<span style="color:var(--purple);font-weight:700;">${c.coachMsg} msg/user</span>` : `<span style="color:var(--slate);">Non déployé</span>`;
 
+  const ticketCutoff = Date.now() - 90 * 86400000;
+  const recentTickets = (c.supportTickets || [])
+    .filter(t => new Date(t.date).getTime() >= ticketCutoff)
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+  const shownTickets = recentTickets.slice(0, 5);
+  const tStatusCfg = { 'en cours': {bg:'#dbeafe',color:'#3b82f6'}, 'résolu': {bg:'#d1fae5',color:'#059669'}, 'abandonné': {bg:'#f3f4f6',color:'#6b7280'} };
+  document.getElementById('sp-tickets').innerHTML = shownTickets.length === 0
+    ? `<p style="font-size:12px;color:var(--slate);padding:6px 0 0;">Aucun ticket support sur les 90 derniers jours.</p>`
+    : shownTickets.map(t => {
+        const days = Math.round((Date.now() - new Date(t.date).getTime()) / 86400000);
+        const ago = days === 0 ? "aujourd'hui" : days === 1 ? 'il y a 1 jour' : `il y a ${days} jours`;
+        const sc = tStatusCfg[t.status] || tStatusCfg['abandonné'];
+        return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);">
+          <span style="font-size:10px;color:var(--slate);white-space:nowrap;flex-shrink:0;">${ago}</span>
+          <span style="font-size:11px;font-weight:500;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${t.topic}">${t.topic}</span>
+          <span style="background:${sc.bg};color:${sc.color};font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;white-space:nowrap;flex-shrink:0;">${t.status}</span>
+          <a href="${t.url}" target="_blank" rel="noopener noreferrer" style="font-size:14px;color:var(--slate);text-decoration:none;flex-shrink:0;line-height:1;" title="Ouvrir dans Intercom">↗</a>
+        </div>`;
+      }).join('') + (recentTickets.length > 5
+        ? `<div style="padding:8px 0 0;"><a href="#" onclick="return false;" style="font-size:11px;color:var(--blue);font-weight:600;text-decoration:none;">Voir tous (${recentTickets.length})</a></div>`
+        : '');
+
   document.getElementById('sp-usage').innerHTML = [{lbl:'Sièges',u:c.seatsUsed,ct:c.seatsContract},{lbl:'Crédits',u:c.creditsUsed,ct:c.creditsContract}].map(u => {
     const p = pct(u.u, u.ct), col = uc(p);
     return `<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="font-weight:600;">${u.lbl}</span><span><b style="color:${col};">${u.u}</b> / ${u.ct} — <span style="color:${col};font-weight:700;">${p}%</span>${p > 100 ? '<span class="upsell">Upsell</span>' : ''}</span></div><div class="ubar" style="height:6px;width:100%;"><div class="ubarf" style="width:${Math.min(p,100)}%;background:${col};"></div></div></div>`;

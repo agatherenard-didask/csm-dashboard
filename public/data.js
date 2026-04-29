@@ -21,10 +21,11 @@ export const DB = [
      {date:"2025-11-08", topic:"Configuration parcours IA"},
      {date:"2025-08-14", topic:"Intégration SSO entreprise"},
    ],
+   // MOCK — à remplacer par fetch Intercom (tickets) — URL et status disponibles dans Intercom API
    supportTickets:[
-     {date:"2026-04-18", topic:"Erreur affichage module vidéo"},
-     {date:"2026-02-11", topic:"Bug export CSV rapports"},
-     {date:"2025-10-05", topic:"Accès refusé certains apprenants"},
+     {date:"2026-04-18", topic:"Erreur affichage module vidéo",        status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/44001"},
+     {date:"2026-02-11", topic:"Bug export CSV rapports",               status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/44002"},
+     {date:"2025-10-05", topic:"Accès refusé certains apprenants",      status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/44003"},
    ]},
 
   {id:"2", name:"Clariane", tier:"Premium", csm:"Adeline", kam:"Valérie",
@@ -40,13 +41,16 @@ export const DB = [
      {date:"2025-10-22", topic:"Bilan déploiement initial"},
      {date:"2025-07-30", topic:"Kick-off projet"},
    ],
+   // MOCK — à remplacer par fetch Intercom (tickets) — URL et status disponibles dans Intercom API
    supportTickets:[
-     {date:"2026-04-22", topic:"Utilisateurs bloqués après MAJ"},
-     {date:"2026-04-05", topic:"Synchronisation SIRH défaillante"},
-     {date:"2026-03-15", topic:"Erreur 403 connexion SSO"},
-     {date:"2026-02-28", topic:"Contenu non accessible mobile"},
-     {date:"2026-01-12", topic:"Bug notation quiz"},
-     {date:"2025-11-18", topic:"Import CSV échoué"},
+     {date:"2026-04-22", topic:"Utilisateurs bloqués après MAJ",        status:"en cours", url:"https://app.intercom.com/a/apps/didask01/conversations/55001"},
+     {date:"2026-04-15", topic:"Permissions rôles incorrectes",          status:"en cours", url:"https://app.intercom.com/a/apps/didask01/conversations/55002"},
+     {date:"2026-04-05", topic:"Synchronisation SIRH défaillante",       status:"en cours", url:"https://app.intercom.com/a/apps/didask01/conversations/55003"},
+     {date:"2026-03-28", topic:"Rapport hebdo vide pour 3 managers",     status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/55004"},
+     {date:"2026-03-15", topic:"Erreur 403 connexion SSO",               status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/55005"},
+     {date:"2026-02-28", topic:"Contenu non accessible mobile",          status:"abandonné",url:"https://app.intercom.com/a/apps/didask01/conversations/55006"},
+     {date:"2026-01-12", topic:"Bug notation quiz",                      status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/55007"},
+     {date:"2025-11-18", topic:"Import CSV échoué",                      status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/55008"},
    ]},
 
   {id:"3", name:"Marvesting", tier:"Standard", csm:"Antoine", kam:"Marion",
@@ -59,10 +63,11 @@ export const DB = [
      {date:"2025-10-30", topic:"Question sur les rapports personnalisés"},
      {date:"2025-07-12", topic:"Déploiement module compliance"},
    ],
+   // MOCK — à remplacer par fetch Intercom (tickets) — URL et status disponibles dans Intercom API
    supportTickets:[
-     {date:"2026-02-08", topic:"Erreur chargement parcours"},
-     {date:"2025-12-19", topic:"Problème certificats PDF"},
-     {date:"2025-09-04", topic:"Accès mobile KO après update"},
+     {date:"2026-02-08", topic:"Erreur chargement parcours",            status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/66001"},
+     {date:"2025-12-19", topic:"Problème certificats PDF",              status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/66002"},
+     {date:"2025-09-04", topic:"Accès mobile KO après update",          status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/66003"},
    ]},
 
   {id:"4", name:"Tasq-OM", tier:"Light", csm:"Florian", kam:"Valérie",
@@ -74,11 +79,12 @@ export const DB = [
      {date:"2025-10-15", topic:"Configuration initiale parcours"},
      {date:"2025-06-20", topic:"Formation administrateurs"},
    ],
+   // MOCK — à remplacer par fetch Intercom (tickets) — URL et status disponibles dans Intercom API
    supportTickets:[
-     {date:"2026-04-10", topic:"Bug affichage leçon interactive"},
-     {date:"2026-02-22", topic:"Réinitialisation mot de passe en masse"},
-     {date:"2025-11-30", topic:"Lenteurs plateforme signalées"},
-     {date:"2025-08-17", topic:"Import utilisateurs échoué"},
+     {date:"2026-04-10", topic:"Bug affichage leçon interactive",       status:"en cours", url:"https://app.intercom.com/a/apps/didask01/conversations/77001"},
+     {date:"2026-02-22", topic:"Réinitialisation mot de passe en masse",status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/77002"},
+     {date:"2025-11-30", topic:"Lenteurs plateforme signalées",          status:"abandonné",url:"https://app.intercom.com/a/apps/didask01/conversations/77003"},
+     {date:"2025-08-17", topic:"Import utilisateurs échoué",             status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/77004"},
    ]},
 
   {id:"5", name:"Cap Retraite", tier:"Standard", csm:"Alexandre", kam:"Marion",
@@ -93,12 +99,13 @@ export const DB = [
      {date:"2025-09-22", topic:"Problèmes signalés par les RH"},
      {date:"2025-06-14", topic:"Premier bilan déploiement"},
    ],
+   // MOCK — à remplacer par fetch Intercom (tickets) — URL et status disponibles dans Intercom API
    supportTickets:[
-     {date:"2026-04-26", topic:"Accès impossible pour 8 utilisateurs"},
-     {date:"2026-03-20", topic:"Crash module évaluation"},
-     {date:"2026-02-14", topic:"Données stats erronées"},
-     {date:"2025-12-03", topic:"Contenu non synchronisé"},
-     {date:"2025-09-30", topic:"Erreur import LDAP"},
+     {date:"2026-04-26", topic:"Accès impossible pour 8 utilisateurs",  status:"en cours", url:"https://app.intercom.com/a/apps/didask01/conversations/88001"},
+     {date:"2026-03-20", topic:"Crash module évaluation",               status:"en cours", url:"https://app.intercom.com/a/apps/didask01/conversations/88002"},
+     {date:"2026-02-14", topic:"Données stats erronées",                status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/88003"},
+     {date:"2025-12-03", topic:"Contenu non synchronisé",               status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/88004"},
+     {date:"2025-09-30", topic:"Erreur import LDAP",                    status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/88005"},
    ]},
 
   {id:"6", name:"L'Oréal", tier:"Premium", csm:"Agathe", kam:"Valérie",
@@ -115,10 +122,11 @@ export const DB = [
      {date:"2025-09-14", topic:"Bilan post-lancement"},
      {date:"2025-07-03", topic:"Formation champions internes"},
    ],
+   // MOCK — à remplacer par fetch Intercom (tickets) — URL et status disponibles dans Intercom API
    supportTickets:[
-     {date:"2026-03-28", topic:"Accès SSO Okta — nouvelle entité"},
-     {date:"2026-01-30", topic:"Lenteurs ponctuelles fin de mois"},
-     {date:"2025-10-18", topic:"Paramétrage langue par défaut"},
-     {date:"2025-08-22", topic:"Bug export reporting groupe"},
+     {date:"2026-03-28", topic:"Accès SSO Okta — nouvelle entité",      status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/99001"},
+     {date:"2026-01-30", topic:"Lenteurs ponctuelles fin de mois",       status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/99002"},
+     {date:"2025-10-18", topic:"Paramétrage langue par défaut",          status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/99003"},
+     {date:"2025-08-22", topic:"Bug export reporting groupe",            status:"résolu",   url:"https://app.intercom.com/a/apps/didask01/conversations/99004"},
    ]},
 ];
