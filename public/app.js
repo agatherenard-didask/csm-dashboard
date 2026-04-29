@@ -181,7 +181,7 @@ function drawTable() {
     const scorecell = `<td><div class="tw" style="gap:7px;"><span style="font-size:16px;font-weight:700;color:${scolor};font-family:'DM Mono',monospace;">${s}</span><span style="font-size:10px;color:var(--slate);">/100</span>${tr2(c.trend)}<div class="sbar"><div class="sbarf" style="width:${s}%;background:${scolor};"></div></div>${stip}</div></td>`;
     const rtip = `<div class="tb"><div class="tt">Pondération du risque</div><div class="tr"><span style="color:var(--peach)">Santé dégradée</span><span class="tv">${ro.hr}/60</span></div><div class="tr"><span style="color:var(--peach)">Urgence (${ro.dy}j restants)</span><span class="tv">${ro.tr}/40</span></div><div class="ttot"><span style="color:var(--peach)">Risque total</span><span style="color:#fff">${r}/100</span></div></div>`;
     const riskcell = `<td><div class="tw" style="gap:7px;"><span style="font-size:16px;font-weight:700;color:${rcolor};font-family:'DM Mono',monospace;">${r}</span><span style="font-size:10px;color:var(--slate);">/100</span><div class="sbar"><div class="sbarf" style="width:${r}%;background:${rcolor};"></div></div>${rtip}</div></td>`;
-    const qa_html = `<td style="text-align:right;"><button class="detb" onclick="openDetails('${c.id}',event)">Fiche →</button></td>`;
+    const qa_html = `<td style="text-align:right;"><button class="ctab" onclick="openDetails('${c.id}',event)">Détails →</button></td>`;
     const row = document.createElement('tr');
     row.onclick = () => openDetails(c.id);
     if (activeTab === 'ai') {
@@ -420,7 +420,7 @@ function renderPriorities() {
         <div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.name}</div>
         <div style="font-size:11px;color:var(--slate);margin-top:2px;line-height:1.4;">${reason}</div>
       </div>
-      <button class="detb" onclick="openDetails('${c.id}',event)" style="flex-shrink:0;">Voir →</button>
+      <button class="detb" onclick="openDetails('${c.id}',event)" style="flex-shrink:0;">Détails →</button>
       <button class="qab" onclick="dismissPriority('${c.id}')" title="Marquer comme traité" style="flex-shrink:0;font-size:11px;padding:5px 8px;">✓</button>
     </div>`
   ).join('');

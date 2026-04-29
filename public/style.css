@@ -72,6 +72,8 @@ tbody tr:hover { background:#fdf6f3; }
 .qab:hover { background:var(--peach); color:white; }
 .detb { padding:5px 12px; border-radius:7px; border:none; cursor:pointer; background:var(--ink10); color:var(--ink60); font-size:11px; font-weight:600; transition:all .12s; white-space:nowrap; font-family:'DM Sans',sans-serif; }
 .detb:hover { background:var(--ink); color:white; }
+.ctab { padding:6px 14px; border-radius:8px; border:none; cursor:pointer; background:var(--peach); color:#fff; font-size:12px; font-weight:700; transition:background .15s,color .15s; white-space:nowrap; font-family:'DM Sans',sans-serif; }
+.ctab:hover { background:var(--ink); color:#fff; }
 
 /* BARS */
 .sbar { height:4px; background:var(--line); border-radius:99px; width:54px; overflow:hidden; flex-shrink:0; }
