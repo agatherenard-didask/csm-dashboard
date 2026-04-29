@@ -426,6 +426,37 @@ function renderPriorities() {
   ).join('');
 }
 
+function initTooltips() {
+  const tbody = document.getElementById('tbody');
+  tbody.addEventListener('mouseover', e => {
+    const tw = e.target.closest('.tw');
+    if (!tw) return;
+    const tb = tw.querySelector('.tb');
+    if (!tb) return;
+    const rect = tw.getBoundingClientRect();
+    const cx = Math.max(108, Math.min(rect.left + rect.width / 2, window.innerWidth - 108));
+    tb.style.left = cx + 'px';
+    tb.style.transform = 'translateX(-50%)';
+    if (rect.top < window.innerHeight / 2) {
+      tb.style.top = (rect.bottom + 8) + 'px';
+      tb.style.bottom = 'auto';
+    } else {
+      tb.style.top = 'auto';
+      tb.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+    }
+    tb.style.visibility = 'visible';
+    tb.style.opacity = '1';
+  });
+  tbody.addEventListener('mouseout', e => {
+    const tw = e.target.closest('.tw');
+    if (!tw || tw.contains(e.relatedTarget)) return;
+    const tb = tw.querySelector('.tb');
+    if (!tb) return;
+    tb.style.visibility = 'hidden';
+    tb.style.opacity = '0';
+  });
+}
+
 ['si','fi-csm','fi-kam','fi-tier','fi-health'].forEach(id => {
   document.getElementById(id).addEventListener('input', drawTable);
   document.getElementById(id).addEventListener('change', drawTable);
@@ -439,6 +470,7 @@ if (_savedUser) {
 }
 drawTable();
 renderPriorities();
+initTooltips();
 
 window.setTab = setTab;
 window.toggleSort = toggleSort;
