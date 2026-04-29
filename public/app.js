@@ -1,7 +1,7 @@
 import { DB, csmWorkload } from './data.js';
 import { getScoreDetails, calcScore, getDays, getChurnRisk } from './score.js';
 
-let activeTab = 'all', sortCol = 'score', sortAsc = false;
+let activeTab = 'all', sortCol = 'score', sortAsc = false, supportPeriod = 'all';
 
 /* Écrit l'état courant des filtres dans l'URL sans rechargement */
 function syncURL() {
@@ -86,6 +86,20 @@ function si2(col) { if (sortCol !== col) return `<span style="color:var(--line);
 function qa(action, name, e) { e.stopPropagation(); alert(`[Demo HubSpot] "${action}" → ${name}`); }
 function toggleSort(col) { sortAsc = sortCol === col ? !sortAsc : col === 'name'; sortCol = col; drawTable(); }
 
+function filterSupport(arr, c) {
+  if (supportPeriod === 'all') return arr.length;
+  const days = supportPeriod === 'meet' ? c.meet : parseInt(supportPeriod);
+  const cutoff = Date.now() - days * 86400000;
+  return arr.filter(e => new Date(e.date).getTime() >= cutoff).length;
+}
+
+function setSupportPeriod(val) {
+  supportPeriod = val;
+  const wrap = document.getElementById('fi-period-wrap');
+  if (wrap) wrap.classList.toggle('active', val !== 'all');
+  drawTable();
+}
+
 function setTab(t) {
   activeTab = t;
   ['all', 'churn', 'renew', 'exp', 'ai'].forEach(x => document.getElementById('tab-' + x).classList.toggle('on', x === t));
@@ -96,6 +110,8 @@ function drawTable() {
   const isPortfolio = activeTab === 'all';
   document.getElementById('kstrip').style.display   = isPortfolio ? '' : 'none';
   document.getElementById('overview').style.display = isPortfolio ? '' : 'none';
+  const periodWrap = document.getElementById('support-period-wrap');
+  if (periodWrap) periodWrap.style.display = (activeTab === 'ai' || activeTab === 'exp') ? 'none' : '';
 
   const search = document.getElementById('si').value.toLowerCase();
   const csmF = document.getElementById('fi-csm').value;
@@ -147,7 +163,7 @@ function drawTable() {
   } else if (activeTab === 'exp') {
     thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('mrr')">MRR ${si2('mrr')}</th><th>Sièges</th><th>Crédits</th><th></th></tr>`;
   } else {
-    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th>Fin de contrat</th><th>Dernier RDV</th><th></th></tr>`;
+    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th>Fin de contrat</th><th>Dernier RDV</th><th>Conversations</th><th>Tickets</th><th></th></tr>`;
   }
 
   const tbody = document.getElementById('tbody');
@@ -183,7 +199,11 @@ function drawTable() {
       const endAlert = dl <= 30 ? `<span class="badge br" style="margin-left:5px;font-size:9px;">${dl}j !</span>` : dl <= 120 ? `<span class="badge ba" style="margin-left:5px;font-size:9px;">${dl}j</span>` : '';
       const endcell = `<td><span style="font-size:12px;font-weight:500;color:${dl <= 30 ? 'var(--red)' : dl <= 120 ? 'var(--amber)' : 'var(--slate)'};">${c.end}</span>${endAlert}</td>`;
       const meetcell = `<td><span style="font-size:12px;font-weight:600;color:${c.meet <= d.mx ? 'var(--ink)' : 'var(--red)'};">${c.meet}j</span><span style="font-size:10px;color:var(--slate);"> · seuil ${d.mx}j</span></td>`;
-      row.innerHTML = namecell + teamcell + scorecell + riskcell + endcell + meetcell + qa_html;
+      const convCount = filterSupport(c.supportConversations, c);
+      const tickCount = filterSupport(c.supportTickets, c);
+      const convcell = `<td><span style="font-size:15px;font-weight:700;color:${convCount > 0 ? 'var(--ink)' : 'var(--slate)'};">${convCount}</span></td>`;
+      const tickcell = `<td><span style="font-size:15px;font-weight:700;color:${tickCount > 0 ? 'var(--ink)' : 'var(--slate)'};">${tickCount}</span></td>`;
+      row.innerHTML = namecell + teamcell + scorecell + riskcell + endcell + meetcell + convcell + tickcell + qa_html;
     }
     tbody.appendChild(row);
   });
@@ -429,3 +449,4 @@ window.resetFilters = resetFilters;
 window.applyCurrentUser = applyCurrentUser;
 window.setAdminView = setAdminView;
 window.dismissPriority = dismissPriority;
+window.setSupportPeriod = setSupportPeriod;
