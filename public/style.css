@@ -132,5 +132,7 @@ tbody tr:hover { background:#fdf6f3; }
 .sptot { display:flex; justify-content:space-between; align-items:center; padding:12px 14px; background:var(--peach); border-radius:10px; margin-top:10px; }
 .sprr { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; border-radius:8px; margin-bottom:6px; }
 
-/* EMPTY */
-.empty { padding:60px 32px; text-align:center; color:var(--slate); font-size:14px; }
+/* EMPTY STATE */
+.empty-state { padding:80px 32px; display:flex; flex-direction:column; align-items:center; gap:14px; }
+.empty-title { font-size:15px; font-weight:600; color:var(--ink); margin:0; }
+.empty-sub { font-size:13px; color:var(--slate); margin:0; }
