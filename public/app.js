@@ -175,7 +175,7 @@ function drawTable() {
   data.forEach(c => {
     const d = getScoreDetails(c), s = d.tot, ro = getChurnRisk(c, s), r = ro.tot, dl = getDays(c.end);
     const scolor = sc(s), rcolor = rc(r);
-    const namecell = `<td><div style="font-size:15px;font-weight:700;letter-spacing:-.2px;">${c.name}</div><div style="font-size:10px;color:var(--slate);margin-top:2px;">${c.nps != null ? `NPS · <b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'NPS · n/a'}</div></td>`;
+    const namecell = `<td><div class="cell-name">${c.name}</div><div class="cell-sub">${c.nps != null ? `NPS · <b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'NPS · n/a'}</div></td>`;
     const teamcell = `<td><div class="cell-team"><span class="chip ${tchip(c.tier)}">${c.tier}</span><span class="cell-csm">${c.csm}</span><span class="cell-kam">KAM: ${c.kam}</span></div></td>`;
     const stip = `<div class="tb"><div class="tt">Détail Health Score</div><div class="tr"><span style="color:var(--peach)">Account Pulse</span><span class="tv">${d.pp}/20</span></div><div class="tr"><span style="color:var(--peach)">Engagement</span><span class="tv">${d.ep}/40</span></div><div class="tr"><span style="color:var(--peach)">Relation</span><span class="tv">${d.rp}/30</span></div><div class="tr"><span style="color:var(--peach)">Proactivité</span><span class="tv">${d.pro}/10</span></div><div class="ttot"><span style="color:var(--peach)">Total</span><span style="color:#fff">${s}/100</span></div></div>`;
     const scorecell = `<td><div class="tw" style="gap:7px;"><span class="cell-score" style="color:${scolor};">${s}</span><span style="font-size:10px;color:var(--slate);">/100</span>${tr2(c.trend)}<div class="sbar"><div class="sbarf" style="width:${s}%;background:${scolor};"></div></div>${stip}</div></td>`;
@@ -196,9 +196,9 @@ function drawTable() {
       const credcell = `<td><div style="font-size:12px;margin-bottom:4px;"><b style="color:${uc(cp2)}">${c.creditsUsed.toLocaleString('fr-FR')}</b> / ${c.creditsContract.toLocaleString('fr-FR')}${cp2 > 100 ? '<span class="upsell">Upsell</span>' : ''}</div><div style="display:flex;align-items:center;gap:5px;"><div class="ubar"><div class="ubarf" style="width:${Math.min(cp2, 100)}%;background:${uc(cp2)};"></div></div><span style="font-size:10px;color:var(--slate);">${cp2}%</span></div></td>`;
       row.innerHTML = namecell + teamcell + scorecell + mrrcell + seatcell + credcell + qa_html;
     } else {
-      const endAlert = dl <= 30 ? `<span class="badge br" style="margin-left:5px;font-size:9px;">${dl}j !</span>` : dl <= 120 ? `<span class="badge ba" style="margin-left:5px;font-size:9px;">${dl}j</span>` : '';
-      const endcell = `<td><span style="font-size:12px;font-weight:500;color:${dl <= 30 ? 'var(--red)' : dl <= 120 ? 'var(--amber)' : 'var(--slate)'};">${c.end}</span>${endAlert}</td>`;
-      const meetcell = `<td><span style="font-size:12px;font-weight:600;color:${c.meet <= d.mx ? 'var(--ink)' : 'var(--red)'};">${c.meet}j</span><span style="font-size:10px;color:var(--slate);"> · seuil ${d.mx}j</span></td>`;
+      const endAlert = dl <= 30 ? `<span class="badge br badge-sm">${dl}j !</span>` : dl <= 120 ? `<span class="badge ba badge-sm">${dl}j</span>` : '';
+      const endcell = `<td><span class="cell-date" style="color:${dl <= 30 ? 'var(--red)' : dl <= 120 ? 'var(--amber)' : 'var(--slate)'};">${c.end}</span>${endAlert}</td>`;
+      const meetcell = `<td><span class="cell-meet" style="color:${c.meet <= d.mx ? 'var(--ink)' : 'var(--red)'};">${c.meet}j</span><span class="cell-meet-sub"> · seuil ${d.mx}j</span></td>`;
       const convCount = filterSupport(c.supportConversations, c);
       const tickCount = filterSupport(c.supportTickets, c);
       const convcell = `<td><span style="font-size:15px;font-weight:700;color:${convCount > 0 ? 'var(--ink)' : 'var(--slate)'};">${convCount}</span></td>`;
