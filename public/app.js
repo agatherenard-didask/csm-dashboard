@@ -83,7 +83,7 @@ const sc = s => s >= 70 ? 'var(--green)' : s >= 40 ? 'var(--amber)' : 'var(--red
 const rc = r => r >= 50 ? 'var(--red)' : r >= 30 ? 'var(--amber)' : 'var(--green)';
 const lcStage = s => s === 'Kick off' ? 'lc-kickoff' : s === 'Onboarding' ? 'lc-onboarding' : s === 'Conception/diffusion' ? 'lc-conception' : 'lc-running';
 const bl = s => s >= 70 ? 'Sain' : s >= 40 ? 'Vigilance' : 'Risque';
-const tchip = t => t === 'Premium' ? 'cp' : t === 'Standard' ? 'cs' : 'cl';
+const tchip = t => t === 'Premium' ? 'tier-premium' : t === 'Standard' ? 'tier-standard' : 'tier-light';
 const pct = (u, c) => Math.min(Math.round(u / c * 100), 150);
 const uc = p => p > 100 ? 'var(--green)' : p > 80 ? 'var(--amber)' : 'var(--blue)';
 function tr2(v) { return v > 0 ? `<span class="tu">↗ +${v}</span>` : v < 0 ? `<span class="td2">↘ ${v}</span>` : `<span class="teq">→ =</span>`; }
@@ -184,7 +184,7 @@ function drawTable() {
     const d = getScoreDetails(c), s = d.tot, ro = getChurnRisk(c, s), r = ro.tot, dl = getDays(c.end);
     const scolor = sc(s), rcolor = rc(r);
     const namecell = `<td><div class="cell-name">${c.name}</div><div class="cell-sub">${c.nps != null ? `NPS · <b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'NPS · n/a'}</div></td>`;
-    const teamcell = `<td><div class="cell-team"><span class="chip ${tchip(c.tier)}">${c.tier}</span><span class="cell-csm">${c.csm}</span><span class="cell-kam">KAM: ${c.kam}</span></div></td>`;
+    const teamcell = `<td><div class="cell-team"><span class="chip ${tchip(c.tier)}">${c.tier}</span><span class="cell-csm">CSM : ${c.csm}</span><span class="cell-kam">KAM : ${c.kam}</span></div></td>`;
     const stip = `<div class="tb"><div class="tt">Détail Health Score</div><div class="tr"><span style="color:var(--peach)">Account Pulse</span><span class="tv">${d.pp}/20</span></div><div class="tr"><span style="color:var(--peach)">Engagement</span><span class="tv">${d.ep}/40</span></div><div class="tr"><span style="color:var(--peach)">Relation</span><span class="tv">${d.rp}/30</span></div><div class="tr"><span style="color:var(--peach)">Proactivité</span><span class="tv">${d.pro}/10</span></div><div class="ttot"><span style="color:var(--peach)">Total</span><span style="color:#fff">${s}/100</span></div></div>`;
     const scorecell = `<td><div class="tw" style="gap:7px;"><span class="cell-score" style="color:${scolor};">${s}</span><span style="font-size:10px;color:var(--slate);">/100</span>${tr2(c.trend)}<div class="sbar"><div class="sbarf" style="width:${s}%;background:${scolor};"></div></div>${stip}</div></td>`;
     const rtip = `<div class="tb"><div class="tt">Pondération du risque</div><div class="tr"><span style="color:var(--peach)">Santé dégradée</span><span class="tv">${ro.hr}/60</span></div><div class="tr"><span style="color:var(--peach)">Urgence (${ro.dy}j restants)</span><span class="tv">${ro.tr}/40</span></div><div class="ttot"><span style="color:var(--peach)">Risque total</span><span style="color:#fff">${r}/100</span></div></div>`;
