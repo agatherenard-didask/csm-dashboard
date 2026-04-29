@@ -471,6 +471,9 @@ if (_savedUser) {
 drawTable();
 renderPriorities();
 initTooltips();
+new ResizeObserver(() => {
+  document.documentElement.style.setProperty('--hdr-h', document.getElementById('hdr').offsetHeight + 'px');
+}).observe(document.getElementById('hdr'));
 
 window.setTab = setTab;
 window.toggleSort = toggleSort;
