@@ -453,7 +453,7 @@ function workloadOpts(csmF) {
   return {
     chart:       { type: 'bar', height: 200, fontFamily: "'DM Sans',sans-serif", toolbar: { show: false } },
     series:      [{ name: 'Workload', data: entries.map(([, v]) => v) }],
-    xaxis:       { categories: entries.map(([name]) => name) },
+    xaxis:       { categories: entries.map(([name]) => name.split(' ')[0]), labels: { rotate: 0 } },
     colors:      ['#f9b494'],
     plotOptions: { bar: { borderRadius: 4, dataLabels: { position: 'top' } } },
     dataLabels:  { enabled: true, offsetY: -18, formatter: v => v, style: { fontWeight: '700', colors: ['#1a1a1a'], fontSize: '11px' } },
