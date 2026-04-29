@@ -278,9 +278,51 @@ function openDetails(id, e) {
 
   document.getElementById('sp-actions').innerHTML = ['✉️ Email','📞 Appel','📝 Note HubSpot','📋 Créer tâche','🔗 Ouvrir deal'].map(a => `<button onclick="qa('${a}','${c.name.replace(/'/g,"\\'")}',event)" style="padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;" onmouseover="this.style.cssText=this.style.cssText+'background:var(--peach);color:white;border-color:var(--peach);'" onmouseout="this.style.background='var(--bg)';this.style.color='var(--ink)';this.style.borderColor='var(--line)'">${a}</button>`).join('');
 
+  document.querySelector('[data-panel="onboarding"]').innerHTML = buildOnboardingPanel(c);
   setSPTab('overview');
   document.getElementById('sp').classList.add('open');
   document.getElementById('overlay').style.display = 'block';
+}
+
+function buildOnboardingPanel(c) {
+  const ob = c.onboarding;
+  if (!ob) return '<p class="sp-placeholder">Pas de données d\'onboarding.</p>';
+
+  const steps = ob.track === 'mentoring'
+    ? ['Session 0', 'Atelier 1', 'Atelier 2', 'Atelier 3']
+    : ['Session 0', 'Atelier 1', 'Atelier 2', 'Atelier 3', 'Atelier 4', 'Atelier 5'];
+
+  const allDone    = ob.currentStep === 'Terminé';
+  const currentIdx = allDone ? steps.length : steps.indexOf(ob.currentStep);
+  const trackLabel = ob.track === 'mentoring' ? 'Mentoring' : 'Formation initiale';
+
+  const parts = [];
+  steps.forEach((step, i) => {
+    const done    = allDone || i < currentIdx;
+    const current = !allDone && i === currentIdx;
+    const cls = done ? 'ob-circle-done' : current ? 'ob-circle-current' : 'ob-circle-future';
+    parts.push(`<div class="ob-step"><div class="ob-circle ${cls}">${done ? '✓' : ''}</div><div class="ob-step-label">${step}</div></div>`);
+    if (i < steps.length - 1)
+      parts.push(`<div class="ob-connector${(allDone || i < currentIdx) ? ' ob-line-done' : ''}"></div>`);
+  });
+
+  const fmt      = iso => { const [y, m, d] = iso.split('-'); return `${d}/${m}/${y}`; };
+  const daysLeft = Math.round((new Date(ob.plannedEndDate) - new Date()) / 86400000);
+  const delayHtml = allDone
+    ? `<span class="ob-delay-done">Terminé ✓</span>`
+    : daysLeft > 0
+      ? `<span class="ob-delay-ok">${daysLeft} jours restants</span>`
+      : `<span class="ob-delay-late">${Math.abs(daysLeft)} jours de retard</span>`;
+
+  return `<div class="ob-card">
+    <span class="ob-track-badge">${trackLabel}</span>
+    <div class="ob-stepper">${parts.join('')}</div>
+    <div class="ob-dates-card">
+      <div class="ob-date-row"><span class="ob-date-lbl">Démarrage</span><span class="ob-date-val">${fmt(ob.startDate)}</span></div>
+      <div class="ob-date-row"><span class="ob-date-lbl">Fin prévue</span><span class="ob-date-val">${fmt(ob.plannedEndDate)}</span></div>
+      <div class="ob-date-row"><span class="ob-date-lbl">Délai</span>${delayHtml}</div>
+    </div>
+  </div>`;
 }
 
 function setSPTab(tab) {
