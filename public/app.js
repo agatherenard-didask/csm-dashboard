@@ -288,31 +288,52 @@ function buildOnboardingPanel(c) {
   const ob = c.onboarding;
   if (!ob) return '<p class="sp-placeholder">Pas de données d\'onboarding.</p>';
 
-  const steps = ob.track === 'mentoring'
+  const fmt        = iso => { const [y, m, d] = iso.split('-'); return `${d}/${m}/${y}`; };
+  const trackLabel = ob.track === 'mentoring' ? 'Mentoring' : 'Formation initiale';
+  const initials   = ob.mentor.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  const sentCls    = ob.mentorSentiment <= 2 ? 'br' : ob.mentorSentiment === 3 ? 'ba' : 'bg';
+  const mentorCard = `<div class="ob-mentor-card">
+    <div class="spst">Mentor</div>
+    <div class="ob-mentor-head">
+      <div class="ob-mentor-avatar">${initials}</div>
+      <div><div class="ob-mentor-name">${ob.mentor}</div><span class="badge ${sentCls}">Sentiment ${ob.mentorSentiment}/5</span></div>
+    </div>
+    <div class="ob-mentor-note">${ob.mentorNote}</div>
+  </div>`;
+
+  if (ob.currentStep === 'Terminé') {
+    const duration = Math.round((new Date(ob.plannedEndDate) - new Date(ob.startDate)) / 86400000);
+    return `<div class="ob-card">
+      <div class="ob-done-banner">✓ Onboarding terminé le ${fmt(ob.plannedEndDate)}</div>
+      <div class="ob-done-summary">
+        <div class="ob-date-row"><span class="ob-date-lbl">Parcours</span><span class="ob-date-val">${trackLabel}</span></div>
+        <div class="ob-date-row"><span class="ob-date-lbl">Durée</span><span class="ob-date-val">${duration} jours</span></div>
+        <div class="ob-date-row"><span class="ob-date-lbl">Mentor</span><span class="ob-date-val">${ob.mentor}</span></div>
+        <div class="ob-date-row"><span class="ob-date-lbl">Sentiment</span><span class="badge ${sentCls}">Sentiment ${ob.mentorSentiment}/5</span></div>
+      </div>
+      ${mentorCard}
+    </div>`;
+  }
+
+  const steps      = ob.track === 'mentoring'
     ? ['Session 0', 'Atelier 1', 'Atelier 2', 'Atelier 3']
     : ['Session 0', 'Atelier 1', 'Atelier 2', 'Atelier 3', 'Atelier 4', 'Atelier 5'];
-
-  const allDone    = ob.currentStep === 'Terminé';
-  const currentIdx = allDone ? steps.length : steps.indexOf(ob.currentStep);
-  const trackLabel = ob.track === 'mentoring' ? 'Mentoring' : 'Formation initiale';
+  const currentIdx = steps.indexOf(ob.currentStep);
 
   const parts = [];
   steps.forEach((step, i) => {
-    const done    = allDone || i < currentIdx;
-    const current = !allDone && i === currentIdx;
+    const done    = i < currentIdx;
+    const current = i === currentIdx;
     const cls = done ? 'ob-circle-done' : current ? 'ob-circle-current' : 'ob-circle-future';
     parts.push(`<div class="ob-step"><div class="ob-circle ${cls}">${done ? '✓' : ''}</div><div class="ob-step-label">${step}</div></div>`);
     if (i < steps.length - 1)
-      parts.push(`<div class="ob-connector${(allDone || i < currentIdx) ? ' ob-line-done' : ''}"></div>`);
+      parts.push(`<div class="ob-connector${i < currentIdx ? ' ob-line-done' : ''}"></div>`);
   });
 
-  const fmt      = iso => { const [y, m, d] = iso.split('-'); return `${d}/${m}/${y}`; };
-  const daysLeft = Math.round((new Date(ob.plannedEndDate) - new Date()) / 86400000);
-  const delayHtml = allDone
-    ? `<span class="ob-delay-done">Terminé ✓</span>`
-    : daysLeft > 0
-      ? `<span class="ob-delay-ok">${daysLeft} jours restants</span>`
-      : `<span class="ob-delay-late">${Math.abs(daysLeft)} jours de retard</span>`;
+  const daysLeft  = Math.round((new Date(ob.plannedEndDate) - new Date()) / 86400000);
+  const delayHtml = daysLeft > 0
+    ? `<span class="ob-delay-ok">${daysLeft} jours restants</span>`
+    : `<span class="ob-delay-late">${Math.abs(daysLeft)} jours de retard</span>`;
 
   return `<div class="ob-card">
     <span class="ob-track-badge">${trackLabel}</span>
@@ -322,6 +343,7 @@ function buildOnboardingPanel(c) {
       <div class="ob-date-row"><span class="ob-date-lbl">Fin prévue</span><span class="ob-date-val">${fmt(ob.plannedEndDate)}</span></div>
       <div class="ob-date-row"><span class="ob-date-lbl">Délai</span>${delayHtml}</div>
     </div>
+    ${mentorCard}
   </div>`;
 }
 

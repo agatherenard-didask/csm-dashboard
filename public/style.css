@@ -310,3 +310,12 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
   0%   { opacity: .55; transform: scale(1);   }
   100% { opacity: 0;   transform: scale(1.65); }
 }
+/* ── MENTOR CARD ── */
+.ob-mentor-card   { display: flex; flex-direction: column; gap: 10px; }
+.ob-mentor-head   { display: flex; align-items: center; gap: 12px; }
+.ob-mentor-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(249,180,148,.2); color: var(--peach-h); font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; letter-spacing: -.5px; }
+.ob-mentor-name   { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.ob-mentor-note   { font-style: italic; font-size: 11px; color: var(--slate); background: #f8fafc; padding: 10px 12px; border-radius: 8px; line-height: 1.55; }
+/* ── ONBOARDING COMPLETE ── */
+.ob-done-banner   { background: var(--green-bg); color: var(--green); padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; }
+.ob-done-summary  { background: var(--bg); border-radius: 10px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
