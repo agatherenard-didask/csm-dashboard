@@ -82,7 +82,7 @@ const tchip = t => t === 'Premium' ? 'cp' : t === 'Standard' ? 'cs' : 'cl';
 const pct = (u, c) => Math.min(Math.round(u / c * 100), 150);
 const uc = p => p > 100 ? 'var(--green)' : p > 80 ? 'var(--amber)' : 'var(--blue)';
 function tr2(v) { return v > 0 ? `<span class="tu">↗ +${v}</span>` : v < 0 ? `<span class="td2">↘ ${v}</span>` : `<span class="teq">→ =</span>`; }
-function si2(col) { if (sortCol !== col) return `<span style="color:var(--line);font-size:10px;margin-left:3px;">↕</span>`; return sortAsc ? `<span style="color:var(--peach);font-size:10px;margin-left:3px;">↑</span>` : `<span style="color:var(--peach);font-size:10px;margin-left:3px;">↓</span>`; }
+function si2(col) { if (sortCol !== col) return `<span style="color:var(--slate);font-size:10px;margin-left:3px;opacity:.5;">↕</span>`; return sortAsc ? `<span style="color:var(--peach);font-size:10px;margin-left:3px;">↑</span>` : `<span style="color:var(--peach);font-size:10px;margin-left:3px;">↓</span>`; }
 function qa(action, name, e) { e.stopPropagation(); alert(`[Demo HubSpot] "${action}" → ${name}`); }
 function toggleSort(col) { sortAsc = sortCol === col ? !sortAsc : col === 'name'; sortCol = col; drawTable(); }
 
@@ -175,12 +175,12 @@ function drawTable() {
   data.forEach(c => {
     const d = getScoreDetails(c), s = d.tot, ro = getChurnRisk(c, s), r = ro.tot, dl = getDays(c.end);
     const scolor = sc(s), rcolor = rc(r);
-    const namecell = `<td><div style="font-size:15px;font-weight:700;letter-spacing:-.2px;">${c.name}</div><div style="font-size:10px;color:var(--slate);margin-top:2px;">${c.nps != null ? `NPS · <b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'NPS · n/a'}</div></td>`;
-    const teamcell = `<td><div style="display:flex;flex-direction:column;gap:3px;"><span class="chip ${tchip(c.tier)}">${c.tier}</span><span style="font-size:12px;font-weight:600;color:var(--peach-h);margin-top:2px;">${c.csm}</span><span style="font-size:11px;color:var(--slate);">KAM: ${c.kam}</span></div></td>`;
+    const namecell = `<td><div class="cell-name">${c.name}</div><div class="cell-sub">${c.nps != null ? `NPS · <b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'NPS · n/a'}</div></td>`;
+    const teamcell = `<td><div class="cell-team"><span class="chip ${tchip(c.tier)}">${c.tier}</span><span class="cell-csm">${c.csm}</span><span class="cell-kam">KAM: ${c.kam}</span></div></td>`;
     const stip = `<div class="tb"><div class="tt">Détail Health Score</div><div class="tr"><span style="color:var(--peach)">Account Pulse</span><span class="tv">${d.pp}/20</span></div><div class="tr"><span style="color:var(--peach)">Engagement</span><span class="tv">${d.ep}/40</span></div><div class="tr"><span style="color:var(--peach)">Relation</span><span class="tv">${d.rp}/30</span></div><div class="tr"><span style="color:var(--peach)">Proactivité</span><span class="tv">${d.pro}/10</span></div><div class="ttot"><span style="color:var(--peach)">Total</span><span style="color:#fff">${s}/100</span></div></div>`;
-    const scorecell = `<td><div class="tw" style="gap:7px;"><span style="font-size:16px;font-weight:700;color:${scolor};font-family:'DM Mono',monospace;">${s}</span><span style="font-size:10px;color:var(--slate);">/100</span>${tr2(c.trend)}<div class="sbar"><div class="sbarf" style="width:${s}%;background:${scolor};"></div></div>${stip}</div></td>`;
+    const scorecell = `<td><div class="tw" style="gap:7px;"><span class="cell-score" style="color:${scolor};">${s}</span><span style="font-size:10px;color:var(--slate);">/100</span>${tr2(c.trend)}<div class="sbar"><div class="sbarf" style="width:${s}%;background:${scolor};"></div></div>${stip}</div></td>`;
     const rtip = `<div class="tb"><div class="tt">Pondération du risque</div><div class="tr"><span style="color:var(--peach)">Santé dégradée</span><span class="tv">${ro.hr}/60</span></div><div class="tr"><span style="color:var(--peach)">Urgence (${ro.dy}j restants)</span><span class="tv">${ro.tr}/40</span></div><div class="ttot"><span style="color:var(--peach)">Risque total</span><span style="color:#fff">${r}/100</span></div></div>`;
-    const riskcell = `<td><div class="tw" style="gap:7px;"><span style="font-size:16px;font-weight:700;color:${rcolor};font-family:'DM Mono',monospace;">${r}</span><span style="font-size:10px;color:var(--slate);">/100</span><div class="sbar"><div class="sbarf" style="width:${r}%;background:${rcolor};"></div></div>${rtip}</div></td>`;
+    const riskcell = `<td><div class="tw" style="gap:7px;"><span class="cell-score" style="color:${rcolor};">${r}</span><span style="font-size:10px;color:var(--slate);">/100</span><div class="sbar"><div class="sbarf" style="width:${r}%;background:${rcolor};"></div></div>${rtip}</div></td>`;
     const qa_html = `<td style="text-align:right;"><button class="ctab" onclick="openDetails('${c.id}',event)">Détails →</button></td>`;
     const row = document.createElement('tr');
     row.onclick = () => openDetails(c.id);
@@ -192,13 +192,13 @@ function drawTable() {
     } else if (activeTab === 'exp') {
       const mrrcell = `<td><span class="mono" style="font-size:13px;font-weight:600;">${c.mrr.toLocaleString('fr-FR')} €</span></td>`;
       const sp2 = pct(c.seatsUsed, c.seatsContract), cp2 = pct(c.creditsUsed, c.creditsContract);
-      const seatcell = `<td><div style="font-size:12px;margin-bottom:4px;"><b style="color:${uc(sp2)}">${c.seatsUsed}</b> / ${c.seatsContract}${sp2 > 100 ? '<span class="upsell">Upsell</span>' : ''}</div><div style="display:flex;align-items:center;gap:5px;"><div class="ubar"><div class="ubarf" style="width:${Math.min(sp2, 100)}%;background:${uc(sp2)};"></div></div><span style="font-size:10px;color:var(--slate);">${sp2}%</span></div></td>`;
-      const credcell = `<td><div style="font-size:12px;margin-bottom:4px;"><b style="color:${uc(cp2)}">${c.creditsUsed}</b> / ${c.creditsContract}${cp2 > 100 ? '<span class="upsell">Upsell</span>' : ''}</div><div style="display:flex;align-items:center;gap:5px;"><div class="ubar"><div class="ubarf" style="width:${Math.min(cp2, 100)}%;background:${uc(cp2)};"></div></div><span style="font-size:10px;color:var(--slate);">${cp2}%</span></div></td>`;
+      const seatcell = `<td><div style="font-size:12px;margin-bottom:4px;"><b style="color:${uc(sp2)}">${c.seatsUsed.toLocaleString('fr-FR')}</b> / ${c.seatsContract.toLocaleString('fr-FR')}${sp2 > 100 ? '<span class="upsell">Upsell</span>' : ''}</div><div style="display:flex;align-items:center;gap:5px;"><div class="ubar"><div class="ubarf" style="width:${Math.min(sp2, 100)}%;background:${uc(sp2)};"></div></div><span style="font-size:10px;color:var(--slate);">${sp2}%</span></div></td>`;
+      const credcell = `<td><div style="font-size:12px;margin-bottom:4px;"><b style="color:${uc(cp2)}">${c.creditsUsed.toLocaleString('fr-FR')}</b> / ${c.creditsContract.toLocaleString('fr-FR')}${cp2 > 100 ? '<span class="upsell">Upsell</span>' : ''}</div><div style="display:flex;align-items:center;gap:5px;"><div class="ubar"><div class="ubarf" style="width:${Math.min(cp2, 100)}%;background:${uc(cp2)};"></div></div><span style="font-size:10px;color:var(--slate);">${cp2}%</span></div></td>`;
       row.innerHTML = namecell + teamcell + scorecell + mrrcell + seatcell + credcell + qa_html;
     } else {
-      const endAlert = dl <= 30 ? `<span class="badge br" style="margin-left:5px;font-size:9px;">${dl}j !</span>` : dl <= 120 ? `<span class="badge ba" style="margin-left:5px;font-size:9px;">${dl}j</span>` : '';
-      const endcell = `<td><span style="font-size:12px;font-weight:500;color:${dl <= 30 ? 'var(--red)' : dl <= 120 ? 'var(--amber)' : 'var(--slate)'};">${c.end}</span>${endAlert}</td>`;
-      const meetcell = `<td><span style="font-size:12px;font-weight:600;color:${c.meet <= d.mx ? 'var(--ink)' : 'var(--red)'};">${c.meet}j</span><span style="font-size:10px;color:var(--slate);"> · seuil ${d.mx}j</span></td>`;
+      const endAlert = dl <= 30 ? `<span class="badge br badge-sm">${dl}j !</span>` : dl <= 120 ? `<span class="badge ba badge-sm">${dl}j</span>` : '';
+      const endcell = `<td><span class="cell-date" style="color:${dl <= 30 ? 'var(--red)' : dl <= 120 ? 'var(--amber)' : 'var(--slate)'};">${c.end}</span>${endAlert}</td>`;
+      const meetcell = `<td><span class="cell-meet" style="color:${c.meet <= d.mx ? 'var(--ink)' : 'var(--red)'};">${c.meet}j</span><span class="cell-meet-sub"> · seuil ${d.mx}j</span></td>`;
       const convCount = filterSupport(c.supportConversations, c);
       const tickCount = filterSupport(c.supportTickets, c);
       const convcell = `<td><span style="font-size:15px;font-weight:700;color:${convCount > 0 ? 'var(--ink)' : 'var(--slate)'};">${convCount}</span></td>`;
@@ -264,7 +264,7 @@ function openDetails(id, e) {
 
   document.getElementById('sp-usage').innerHTML = [{lbl:'Sièges',u:c.seatsUsed,ct:c.seatsContract},{lbl:'Crédits',u:c.creditsUsed,ct:c.creditsContract}].map(u => {
     const p = pct(u.u, u.ct), col = uc(p);
-    return `<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="font-weight:600;">${u.lbl}</span><span><b style="color:${col};">${u.u}</b> / ${u.ct} — <span style="color:${col};font-weight:700;">${p}%</span>${p > 100 ? '<span class="upsell">Upsell</span>' : ''}</span></div><div class="ubar" style="height:6px;width:100%;"><div class="ubarf" style="width:${Math.min(p,100)}%;background:${col};"></div></div></div>`;
+    return `<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="font-weight:600;">${u.lbl}</span><span><b style="color:${col};">${u.u.toLocaleString('fr-FR')}</b> / ${u.ct.toLocaleString('fr-FR')} — <span style="color:${col};font-weight:700;">${p}%</span>${p > 100 ? '<span class="upsell">Upsell</span>' : ''}</span></div><div class="ubar" style="height:6px;width:100%;"><div class="ubarf" style="width:${Math.min(p,100)}%;background:${col};"></div></div></div>`;
   }).join('');
 
   document.getElementById('sp-relation').innerHTML = [
