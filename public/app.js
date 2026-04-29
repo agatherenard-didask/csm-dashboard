@@ -228,7 +228,7 @@ function openDetails(id, e) {
   document.getElementById('sp-relation').innerHTML = [
     {icon:'🤝', lbl:'Dernier meeting', val:`Il y a ${c.meet} jours${c.meet > d.mx ? ' <b style="color:var(--red);">(En retard)</b>' : ''}`, bg:'var(--bg)'},
     {icon:'📅', lbl:'Prochain RDV',    val:c.next || '<b style="color:var(--red);">Non planifié ⚠</b>', bg:'#fdf6f3'},
-    {icon:'📊', lbl:'NPS Hyperline',   val:c.nps != null ? `<b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'Non disponible', bg:'var(--bg)'},
+    {icon:'📊', lbl:'NPS',             val:c.nps != null ? `<b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'Non disponible', bg:'var(--bg)'},
   ].map(rel => `<div class="sprr" style="background:${rel.bg};"><span style="font-size:12px;font-weight:600;">${rel.icon} ${rel.lbl}</span><span style="font-size:12px;">${rel.val}</span></div>`).join('');
 
   document.getElementById('sp-actions').innerHTML = ['✉️ Email','📞 Appel','📝 Note HubSpot','📋 Créer tâche','🔗 Ouvrir deal'].map(a => `<button onclick="qa('${a}','${c.name.replace(/'/g,"\\'")}',event)" style="padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;" onmouseover="this.style.cssText=this.style.cssText+'background:var(--peach);color:white;border-color:var(--peach);'" onmouseout="this.style.background='var(--bg)';this.style.color='var(--ink)';this.style.borderColor='var(--line)'">${a}</button>`).join('');
