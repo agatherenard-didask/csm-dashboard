@@ -278,8 +278,18 @@ function openDetails(id, e) {
 
   document.getElementById('sp-actions').innerHTML = ['✉️ Email','📞 Appel','📝 Note HubSpot','📋 Créer tâche','🔗 Ouvrir deal'].map(a => `<button onclick="qa('${a}','${c.name.replace(/'/g,"\\'")}',event)" style="padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;" onmouseover="this.style.cssText=this.style.cssText+'background:var(--peach);color:white;border-color:var(--peach);'" onmouseout="this.style.background='var(--bg)';this.style.color='var(--ink)';this.style.borderColor='var(--line)'">${a}</button>`).join('');
 
+  setSPTab('overview');
   document.getElementById('sp').classList.add('open');
   document.getElementById('overlay').style.display = 'block';
+}
+
+function setSPTab(tab) {
+  document.querySelectorAll('#spscr [data-panel]').forEach(el => {
+    el.style.display = el.dataset.panel === tab ? '' : 'none';
+  });
+  document.querySelectorAll('.sp-tab').forEach(el => {
+    el.classList.toggle('on', el.dataset.tab === tab);
+  });
 }
 
 function closeDetails() {
@@ -510,3 +520,4 @@ window.applyCurrentUser = applyCurrentUser;
 window.setAdminView = setAdminView;
 window.dismissPriority = dismissPriority;
 window.setSupportPeriod = setSupportPeriod;
+window.setSPTab = setSPTab;

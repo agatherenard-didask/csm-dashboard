@@ -179,6 +179,13 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
 .sptot { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: var(--peach); border-radius: 10px; margin-top: 10px; }
 .sprr { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 8px; margin-bottom: 6px; background: var(--bg); }
 
+/* ── SP TABS ── */
+#sp-nav { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+.sp-tab { padding: 10px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--slate); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; margin-bottom: -1px; transition: color 150ms var(--ease), border-color 200ms var(--ease); font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+.sp-tab:hover { color: var(--ink); }
+.sp-tab.on { color: var(--ink); border-bottom-color: var(--peach); }
+.sp-placeholder { padding: 48px 0; text-align: center; color: var(--slate); font-size: 13px; margin: 0; }
+
 /* ── EMPTY STATE ── */
 .empty-state { padding: 80px 32px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .empty-title { font-size: 16px; font-weight: 700; color: var(--ink); margin: 0; line-height: 1.2; }
