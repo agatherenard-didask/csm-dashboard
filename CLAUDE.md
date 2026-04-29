@@ -31,6 +31,43 @@ Dashboard de priorisation pour l'équipe CSM/KAM de Didask. L'équipe perd 50 % 
 - Urgence temporelle : 0 si >120j, interpolé linéairement si <120j, 40 si expiré
 - Total : `min(risqueSanté + urgence, 100)`
 
+## Modèle métier
+
+### Lifecycle stages (source : HubSpot, champ `clientStage`)
+
+| Stage | Signification |
+|---|---|
+| **Kick off** | Contrat signé, démarrage de la relation — avant le premier atelier |
+| **Onboarding** | Parcours d'onboarding en cours (stepper actif) |
+| **Conception/diffusion** | Onboarding terminé, client en phase de production de contenu |
+| **Running** | Régime de croisière — usage autonome de la plateforme |
+
+Les stages sont définis côté HubSpot et fetché tels quels (ne pas recalculer dans le dashboard).
+
+### Tracks d'onboarding
+
+| Track | Étapes |
+|---|---|
+| **Mentoring** | Session 0 → Atelier 1 → Atelier 2 → Atelier 3 (4 étapes) |
+| **Formation initiale** | Session 0 → Atelier 1 → Atelier 2 → Atelier 3 → Atelier 4 → Atelier 5 (6 étapes) |
+
+L'étape courante est stockée dans `onboarding.currentStep`. La valeur `"Terminé"` déclenche l'état de complétion (bannière verte, pas de stepper).
+
+### Health Score (score.js — `getScoreDetails`)
+
+| Axe | Poids | Règle |
+|---|---|---|
+| **Pulse** | 20 pts | 5→20, 4→15, 3→10, 2→5, 1→0 |
+| **Engagement** | 40 pts | moyenne(uLog, lLog) ≤15j→40, ≤30j→20, >30j→0 |
+| **Relation** | 30 pts | meet ≤ seuil Tier → 30 ; ≤ seuil+30j → 15 ; sinon → 0 (seuils : Premium 30j, Standard 90j, Light 365j) |
+| **Proactivité** | 10 pts | RDV planifié (`next` non nul) → 10 ; sinon → 0 |
+
+Total plafonné à 100.
+
+### CSM Workload
+
+Calculé entièrement côté HubSpot (custom property `csm_workload`). Le dashboard le fetche et l'affiche tel quel — **aucun recalcul côté frontend**. Valeur = nombre pondéré de comptes actifs dans le portefeuille d'un CSM.
+
 ## Stack technique
 
 - **HTML / CSS / JS pur** — pas de framework, pas de build step
