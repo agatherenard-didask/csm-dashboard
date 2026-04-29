@@ -101,7 +101,7 @@ th { padding: 11px 16px; font-size: 10.5px; font-weight: 700; text-transform: up
 th.s { cursor: pointer; }
 th.s:hover { color: var(--ink); }
 thead th { position: sticky; top: var(--hdr-h,0); z-index: 20; background: var(--bg); box-shadow: 0 2px 6px rgba(0,0,0,.05); }
-td { padding: 0 16px; height: 64px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+td { padding: 20px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 tbody tr:last-child td { border-bottom: none; }
 tbody tr { transition: background 150ms var(--ease); cursor: pointer; }
 tbody tr:hover td { background: var(--hover); }
@@ -219,9 +219,10 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
 .cell-sub  { font-size: 10px; color: var(--slate); margin-top: 2px; }
 
 /* ── CELL: Team ── */
-.cell-team { display: flex; flex-direction: column; gap: 3px; }
-.cell-csm  { font-size: 12px; font-weight: 600; color: var(--peach-h); margin-top: 2px; }
-.cell-kam  { font-size: 11px; color: var(--slate); }
+.cell-team { display: flex; flex-direction: column; }
+.cell-csm  { font-size: 13.5px; font-weight: 500; color: #1e293b; margin-top: 12px; }
+.cell-kam  { font-size: 13.5px; font-weight: 500; color: #1e293b; margin-top: 4px; }
+.cell-lbl  { color: var(--slate); font-weight: 400; }
 
 /* ── TOOLTIP LABELS ── */
 .tl       { color: var(--peach); }
