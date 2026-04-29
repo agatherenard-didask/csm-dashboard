@@ -1,5 +1,5 @@
 import { DB, csmWorkload } from './data.js';
-import { getScoreDetails, calcScore, getDays, getChurnRisk } from './score.js';
+import { getScoreDetails, calcScore, getDays, getChurnRisk, calcAIAdoption } from './score.js';
 
 let activeTab = 'all', sortCol = 'score', sortAsc = false, supportPeriod = 'all';
 
@@ -131,6 +131,7 @@ function drawTable() {
     if (sortCol === 'score') return sortAsc ? calcScore(a) - calcScore(b) : calcScore(b) - calcScore(a);
     if (sortCol === 'risk')  return sortAsc ? getChurnRisk(a, calcScore(a)).tot - getChurnRisk(b, calcScore(b)).tot : getChurnRisk(b, calcScore(b)).tot - getChurnRisk(a, calcScore(a)).tot;
     if (sortCol === 'mrr')   return sortAsc ? a.mrr - b.mrr : b.mrr - a.mrr;
+    if (sortCol === 'ai')    return sortAsc ? calcAIAdoption(a).tot - calcAIAdoption(b).tot : calcAIAdoption(b).tot - calcAIAdoption(a).tot;
     return 0;
   });
   updateCharts(data, csmF);
@@ -159,7 +160,7 @@ function drawTable() {
 
   const thead = document.getElementById('thead');
   if (activeTab === 'ai') {
-    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th style="text-align:center">🤖 Assistant IA</th><th style="text-align:center">🎽 Coach IA</th><th style="text-align:center">Health Score</th><th></th></tr>`;
+    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="tc">🤖 Assistant IA</th><th class="tc">🎽 Coach IA</th><th class="s tc" onclick="toggleSort('ai')">Score Adoption IA ${si2('ai')}</th><th></th></tr>`;
   } else if (activeTab === 'exp') {
     thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('mrr')">MRR ${si2('mrr')}</th><th>Sièges</th><th>Crédits</th><th></th></tr>`;
   } else {
@@ -187,8 +188,10 @@ function drawTable() {
     if (activeTab === 'ai') {
       const aic = c.aiAct ? `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><span class="badge bg">Activé</span><span style="font-size:12px;font-weight:600;">${c.aiMsg} msg/u</span></div>` : `<span class="badge" style="background:var(--bg);color:var(--slate);">Inactif</span>`;
       const coc = c.coachAct ? `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><span class="badge bp">Activé</span><span style="font-size:12px;font-weight:600;">${c.coachMsg} msg/u</span></div>` : `<span class="badge" style="background:var(--bg);color:var(--slate);">Inactif</span>`;
-      const sbadge = s >= 70 ? 'bg' : s >= 40 ? 'ba' : 'br';
-      row.innerHTML = namecell + teamcell + `<td style="text-align:center">${aic}</td><td style="text-align:center">${coc}</td><td style="text-align:center"><span class="badge ${sbadge}">${s}/100</span></td>` + qa_html;
+      const ai = calcAIAdoption(c), acolor = sc(ai.tot);
+      const aitip = `<div class="tb"><div class="tt">Score Adoption IA</div><div class="tr"><span class="tl">🤖 Assistant activé</span><span class="tv">${ai.aiPts}/50</span></div><div class="tr"><span class="tl">Usage (${c.aiMsg} msg/u)</span><span class="tv">${ai.aiUsagePts}/20</span></div><div class="tr"><span class="tl">🎽 Coach activé</span><span class="tv">${ai.coachPts}/30</span></div><div class="ttot"><span class="tl">Total</span><span class="ttot-val">${ai.tot}/100</span></div></div>`;
+      const aiscell = `<td class="tc"><div class="tw"><span class="cell-score" style="color:${acolor};">${ai.tot}</span><span style="font-size:10px;color:var(--slate);">/100</span><div class="sbar"><div class="sbarf" style="width:${ai.tot}%;background:${acolor};"></div></div>${aitip}</div></td>`;
+      row.innerHTML = namecell + teamcell + `<td class="tc">${aic}</td><td class="tc">${coc}</td>` + aiscell + qa_html;
     } else if (activeTab === 'exp') {
       const mrrcell = `<td><span class="mono" style="font-size:13px;font-weight:600;">${c.mrr.toLocaleString('fr-FR')} €</span></td>`;
       const sp2 = pct(c.seatsUsed, c.seatsContract), cp2 = pct(c.creditsUsed, c.creditsContract);

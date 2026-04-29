@@ -18,6 +18,19 @@ export function getDays(s) {
   return Math.round((new Date(+year, +month - 1, +day) - new Date()) / 864e5);
 }
 
+/*
+ * Score Adoption IA (sur 100)
+ * 50 pts — Assistant IA activé
+ * 20 pts — usage Assistant : min(1, aiMsg ÷ 10) × 20  (seuil de saturation à 10 msg/u)
+ * 30 pts — Coach IA activé
+ */
+export function calcAIAdoption(c) {
+  const aiPts      = c.aiAct    ? 50 : 0;
+  const aiUsagePts = c.aiAct    ? Math.round(Math.min(1, c.aiMsg / 10) * 20) : 0;
+  const coachPts   = c.coachAct ? 30 : 0;
+  return { tot: aiPts + aiUsagePts + coachPts, aiPts, aiUsagePts, coachPts };
+}
+
 export function getChurnRisk(c, s) {
   const dy = getDays(c.end);
   const hr = Math.min(Math.round(60 - s * 0.6), 60);
