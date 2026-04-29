@@ -14,6 +14,17 @@ export const DB = [
    pulse:5, start:"01/01/2026", end:"31/12/2026", uLog:2, lLog:1, meet:10, next:"15/06/2026",
    aiAct:true, aiMsg:18, coachAct:false, coachMsg:0, trend:5,
    seatsUsed:120, seatsContract:100, creditsUsed:450, creditsContract:500, mrr:4200, nps:72,
+   // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
+   clientStage:"Conception/diffusion",
+   onboarding:{
+     track:"mentoring",
+     currentStep:"Atelier 3",
+     startDate:"2026-01-08",
+     plannedEndDate:"2026-03-28",
+     mentor:"Sophie Lambert",
+     mentorSentiment:5,
+     mentorNote:"Équipe très réactive, champions internes très actifs.",
+   },
    supportConversations:[
      {date:"2026-04-15", topic:"Onboarding nouvelles équipes commerciales"},
      {date:"2026-03-02", topic:"Question droits administrateurs"},
@@ -32,6 +43,17 @@ export const DB = [
    pulse:2, start:"15/05/2025", end:"15/05/2026", uLog:45, lLog:60, meet:65, next:null,
    aiAct:true, aiMsg:3, coachAct:false, coachMsg:0, trend:-12,
    seatsUsed:45, seatsContract:50, creditsUsed:100, creditsContract:200, mrr:6500, nps:34,
+   // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
+   clientStage:"Running",
+   onboarding:{
+     track:"formation initiale",
+     currentStep:"Terminé",
+     startDate:"2025-05-22",
+     plannedEndDate:"2025-10-31",
+     mentor:"Marc Dupont",
+     mentorSentiment:2,
+     mentorNote:"Adoption difficile malgré l'accompagnement renforcé.",
+   },
    supportConversations:[
      {date:"2026-04-20", topic:"Relance suite baisse d'engagement"},
      {date:"2026-04-01", topic:"Point sur les objectifs Q1"},
@@ -57,6 +79,17 @@ export const DB = [
    pulse:4, start:"20/01/2026", end:"20/01/2027", uLog:5, lLog:2, meet:45, next:"10/05/2026",
    aiAct:true, aiMsg:12, coachAct:true, coachMsg:8, trend:2,
    seatsUsed:80, seatsContract:80, creditsUsed:550, creditsContract:500, mrr:2100, nps:61,
+   // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
+   clientStage:"Onboarding",
+   onboarding:{
+     track:"formation initiale",
+     currentStep:"Atelier 2",
+     startDate:"2026-01-27",
+     plannedEndDate:"2026-06-15",
+     mentor:"Sophie Lambert",
+     mentorSentiment:4,
+     mentorNote:"Bonne dynamique, responsables de formation très impliqués.",
+   },
    supportConversations:[
      {date:"2026-03-25", topic:"Présentation nouvelles fonctionnalités IA"},
      {date:"2026-01-14", topic:"Bilan formation managers"},
@@ -74,6 +107,17 @@ export const DB = [
    pulse:3, start:"01/04/2025", end:"20/05/2026", uLog:25, lLog:10, meet:120, next:null,
    aiAct:false, aiMsg:0, coachAct:false, coachMsg:0, trend:-5,
    seatsUsed:15, seatsContract:20, creditsUsed:50, creditsContract:100, mrr:800, nps:null,
+   // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
+   clientStage:"Running",
+   onboarding:{
+     track:"mentoring",
+     currentStep:"Terminé",
+     startDate:"2025-04-07",
+     plannedEndDate:"2025-07-04",
+     mentor:"Lucas Martin",
+     mentorSentiment:3,
+     mentorNote:"Onboarding correct, engagement post-lancement à consolider.",
+   },
    supportConversations:[
      {date:"2026-03-01", topic:"Point trimestriel usage"},
      {date:"2025-10-15", topic:"Configuration initiale parcours"},
@@ -91,6 +135,17 @@ export const DB = [
    pulse:1, start:"12/06/2025", end:"12/06/2026", uLog:70, lLog:80, meet:90, next:null,
    aiAct:false, aiMsg:0, coachAct:false, coachMsg:0, trend:-20,
    seatsUsed:10, seatsContract:50, creditsUsed:10, creditsContract:200, mrr:1800, nps:18,
+   // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
+   clientStage:"Running",
+   onboarding:{
+     track:"formation initiale",
+     currentStep:"Terminé",
+     startDate:"2025-06-19",
+     plannedEndDate:"2025-12-05",
+     mentor:"Marc Dupont",
+     mentorSentiment:1,
+     mentorNote:"Fort taux d'abandon, résistance RH importante pendant l'onboarding.",
+   },
    supportConversations:[
      {date:"2026-04-24", topic:"Escalade insatisfaction utilisateurs"},
      {date:"2026-03-18", topic:"Point critique engagement"},
@@ -112,6 +167,17 @@ export const DB = [
    pulse:5, start:"01/02/2026", end:"31/01/2027", uLog:1, lLog:1, meet:5, next:"10/06/2026",
    aiAct:true, aiMsg:25, coachAct:true, coachMsg:15, trend:15,
    seatsUsed:510, seatsContract:500, creditsUsed:1200, creditsContract:1000, mrr:12000, nps:81,
+   // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
+   clientStage:"Kick off",
+   onboarding:{
+     track:"mentoring",
+     currentStep:"Session 0",
+     startDate:"2026-02-12",
+     plannedEndDate:"2026-05-22",
+     mentor:"Lucas Martin",
+     mentorSentiment:5,
+     mentorNote:"Kick off très engageant, forte mobilisation des équipes EMEA.",
+   },
    supportConversations:[
      {date:"2026-04-21", topic:"Préparation déploiement international"},
      {date:"2026-04-01", topic:"Bilan T1 — résultats excellents"},
