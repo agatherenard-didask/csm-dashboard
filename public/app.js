@@ -720,33 +720,32 @@ function renderPriorities() {
 }
 
 function initTooltips() {
-  const tbody = document.getElementById('tbody');
+  const portal = document.getElementById('tt-portal');
+  const tbody  = document.getElementById('tbody');
   tbody.addEventListener('mouseover', e => {
     const tw = e.target.closest('.tw');
     if (!tw) return;
     const tb = tw.querySelector('.tb');
     if (!tb) return;
+    portal.innerHTML = tb.innerHTML;
+    portal.style.borderLeft = tb.style.borderLeft || '';
     const rect = tw.getBoundingClientRect();
     const cx = Math.max(108, Math.min(rect.left + rect.width / 2, window.innerWidth - 108));
-    tb.style.left = cx + 'px';
-    tb.style.transform = 'translateX(-50%)';
+    portal.style.left = cx + 'px';
+    portal.style.transform = 'translateX(-50%)';
     if (rect.top < window.innerHeight / 2) {
-      tb.style.top = (rect.bottom + 8) + 'px';
-      tb.style.bottom = 'auto';
+      portal.style.top    = (rect.bottom + 8) + 'px';
+      portal.style.bottom = '';
     } else {
-      tb.style.top = 'auto';
-      tb.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+      portal.style.top    = '';
+      portal.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
     }
-    tb.style.visibility = 'visible';
-    tb.style.opacity = '1';
+    portal.classList.add('visible');
   });
   tbody.addEventListener('mouseout', e => {
     const tw = e.target.closest('.tw');
     if (!tw || tw.contains(e.relatedTarget)) return;
-    const tb = tw.querySelector('.tb');
-    if (!tb) return;
-    tb.style.visibility = 'hidden';
-    tb.style.opacity = '0';
+    portal.classList.remove('visible');
   });
 }
 
