@@ -57,6 +57,19 @@ export const DB = [
      mentorSentiment:2,
      mentorNote:"Adoption difficile malgré l'accompagnement renforcé.",
    },
+   // MOCK — sondage post-formation Typeform → HubSpot → Dashboard. Custom properties HubSpot à créer : post_training_avg_score, post_training_response_count, post_training_invited_count, post_training_dimensions_*, post_training_verbatim_positive, post_training_verbatim_critical, post_training_typeform_url.
+   postTrainingSurvey: {
+     averageScore: 6.2,
+     responseCount: 12,
+     invitedCount: 20,
+     completedAt: "2025-11-15",
+     dimensions: { pedagogie: 6.4, mentor: 6.8, plateforme: 5.5, roi: 6.0 },
+     verbatims: {
+       positive: "Certains modules étaient bien construits, le rythme des ateliers nous convenait.",
+       critical: "L'adoption a été difficile : les équipes n'ont pas adhéré et l'accompagnement n'a pas suffi à lever les résistances internes.",
+     },
+     typeformResultsUrl: "https://didask.typeform.com/results/cla2025",
+   },
    // MOCK — historique de 30 jours, à remplacer par snapshots HubSpot ou table dédiée d'historique.
    healthScoreHistory: [60,58,57,55,54,52,51,50,48,47,46,44,43,42,40,38,37,35,33,31,30,28,27,25,22,20,15,12, 8, 5],
    riskChurnHistory:   [30,32,33,35,37,38,40,42,44,45,47,49,51,52,54,56,58,60,62,63,65,67,70,72,75,78,82,85,88,92],
@@ -127,6 +140,18 @@ export const DB = [
      mentorSentiment:3,
      mentorNote:"Onboarding correct, engagement post-lancement à consolider.",
    },
+   postTrainingSurvey: {
+     averageScore: 7.1,
+     responseCount: 11,
+     invitedCount: 15,
+     completedAt: "2025-07-18",
+     dimensions: { pedagogie: 7.2, mentor: 7.5, plateforme: 6.8, roi: 6.9 },
+     verbatims: {
+       positive: "La progression des ateliers était bien calibrée, Fadma a su s'adapter à notre rythme.",
+       critical: "L'engagement post-formation a été compliqué à maintenir sans ressource dédiée en interne.",
+     },
+     typeformResultsUrl: "https://didask.typeform.com/results/tasq2025",
+   },
    // MOCK — historique de 30 jours, à remplacer par snapshots HubSpot ou table dédiée d'historique.
    healthScoreHistory: [58,60,62,60,61,59,62,61,59,60,62,61,59,61,62,60,61,60,62,61,59,60,61,62,60,61,59,60,61,60],
    riskChurnHistory:   [50,52,51,53,52,54,53,52,54,55,53,54,55,56,54,55,56,54,56,57,55,56,57,56,57,58,56,57,58,57],
@@ -157,6 +182,18 @@ export const DB = [
      mentor:"Charles",
      mentorSentiment:1,
      mentorNote:"Fort taux d'abandon, résistance RH importante pendant l'onboarding.",
+   },
+   postTrainingSurvey: {
+     averageScore: 5.3,
+     responseCount: 9,
+     invitedCount: 28,
+     completedAt: "2025-12-20",
+     dimensions: { pedagogie: 5.5, mentor: 4.8, plateforme: 5.0, roi: 5.2 },
+     verbatims: {
+       positive: "Quelques modules de contenu étaient pertinents pour nos équipes de terrain.",
+       critical: "Le taux d'abandon a été très élevé dès le début. La résistance des équipes RH et l'absence de championnat interne ont fortement compromis la formation.",
+     },
+     typeformResultsUrl: "https://didask.typeform.com/results/cap2025",
    },
    // MOCK — historique de 30 jours, à remplacer par snapshots HubSpot ou table dédiée d'historique.
    healthScoreHistory: [68,66,65,63,62,60,59,57,56,54,53,52,51,50,49,48,47,46,45,44,43,43,42,42,41,42,41,41,41,40],
