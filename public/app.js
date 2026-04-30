@@ -694,8 +694,8 @@ renderPriorities();
 initialRenderDone = true;
 initTooltips();
 new ResizeObserver(() => {
-  document.documentElement.style.setProperty('--hdr-h', document.getElementById('hdr').offsetHeight + 'px');
-}).observe(document.getElementById('hdr'));
+  document.documentElement.style.setProperty('--toolbar-h', document.getElementById('toolbar').offsetHeight + 'px');
+}).observe(document.getElementById('toolbar'));
 
 const _toolbar = document.getElementById('toolbar');
 window.addEventListener('scroll', () => {
