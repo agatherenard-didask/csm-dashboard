@@ -101,8 +101,6 @@ function filterSupport(arr, c) {
 
 function setSupportPeriod(val) {
   supportPeriod = val;
-  const wrap = document.getElementById('fi-period-wrap');
-  if (wrap) wrap.classList.toggle('active', val !== 'all');
   drawTable();
 }
 
@@ -112,6 +110,16 @@ function setTab(t) {
   drawTable();
 }
 
+const PERIOD_OPTS = [
+  ['all','Depuis le début'],['30','30 derniers jours'],['90','90 derniers jours'],
+  ['180','6 derniers mois'],['meet','Depuis le dernier RDV'],
+];
+function periodTh(lbl) {
+  const dot = supportPeriod !== 'all' ? '<span class="period-dot"></span>' : '';
+  const opts = PERIOD_OPTS.map(([v,l]) => `<option value="${v}"${v===supportPeriod?' selected':''}>${l}</option>`).join('');
+  return `<th><div class="th-period-wrap"><span>${lbl}${dot}</span><select class="th-period" onchange="setSupportPeriod(this.value)">${opts}</select></div></th>`;
+}
+
 function drawTable() {
   const isPortfolio = activeTab === 'all';
   const isReporting = activeTab === 'reporting';
@@ -119,8 +127,6 @@ function drawTable() {
   document.getElementById('overview').style.display = isReporting ? '' : 'none';
   const twrap = document.getElementById('twrap');
   if (twrap) twrap.style.display = isReporting ? 'none' : '';
-  const periodWrap = document.getElementById('support-period-wrap');
-  if (periodWrap) periodWrap.style.display = (activeTab === 'ai' || activeTab === 'exp' || isReporting) ? 'none' : '';
 
   const search = document.getElementById('si').value.toLowerCase();
   const csmF   = document.getElementById('fi-csm').value;
@@ -189,7 +195,7 @@ function drawTable() {
   } else if (activeTab === 'exp') {
     thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('mrr')">MRR ${si2('mrr')}</th><th>Sièges</th><th>Crédits</th><th></th></tr>`;
   } else {
-    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th>Fin de contrat</th><th>Dernier RDV</th><th>Statut</th><th>Conversations</th><th>Tickets</th><th></th></tr>`;
+    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th>Fin de contrat</th><th>Dernier RDV</th><th>Statut</th>${periodTh('Conversations')}${periodTh('Tickets')}<th></th></tr>`;
   }
 
   const tbody = document.getElementById('tbody');
