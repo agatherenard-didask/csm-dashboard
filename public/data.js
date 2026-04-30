@@ -20,6 +20,8 @@ export const DB = [
    contentCreationCount: 22, lastContentCreatedDate: "2026-04-28",
    // MOCK — sources : HubSpot Engagements (emails, calls, meetings) + Intercom (tickets) + Slack API.
    lastEmailDate: "2026-04-22", lastInteractionDate: "2026-04-22",
+   // MOCK — appUrl à brancher sur Didask App, slackChannelUrl via Slack API ou table de mapping.
+   appName: "Uptoo", appUrl: "https://app.didask.com/admin/organizations/1001", slackChannelUrl: "https://didask.slack.com/channels/client-uptoo",
    onboarding:{
      track:"mentoring",
      currentStep:"Atelier 3",
@@ -55,6 +57,8 @@ export const DB = [
    contentCreationCount: 2, lastContentCreatedDate: "2026-02-10",
    // MOCK — sources : HubSpot Engagements (emails, calls, meetings) + Intercom (tickets) + Slack API.
    lastEmailDate: "2026-04-10", lastInteractionDate: "2026-04-22",
+   // MOCK — appUrl à brancher sur Didask App, slackChannelUrl via Slack API ou table de mapping.
+   appName: "Clariane", appUrl: "https://app.didask.com/admin/organizations/1002", slackChannelUrl: "https://didask.slack.com/channels/client-clariane",
    onboarding:{
      track:"formation initiale",
      currentStep:"Terminé",
@@ -110,6 +114,8 @@ export const DB = [
    contentCreationCount: 11, lastContentCreatedDate: "2026-04-20",
    // MOCK — sources : HubSpot Engagements (emails, calls, meetings) + Intercom (tickets) + Slack API.
    lastEmailDate: "2026-04-18", lastInteractionDate: "2026-04-18",
+   // MOCK — appUrl à brancher sur Didask App, slackChannelUrl via Slack API ou table de mapping.
+   appName: "Marvesting", appUrl: "https://app.didask.com/admin/organizations/1003", slackChannelUrl: null,
    onboarding:{
      track:"formation initiale",
      currentStep:"Atelier 2",
@@ -144,6 +150,8 @@ export const DB = [
    contentCreationCount: 1, lastContentCreatedDate: "2025-12-03",
    // MOCK — sources : HubSpot Engagements (emails, calls, meetings) + Intercom (tickets) + Slack API.
    lastEmailDate: "2026-03-15", lastInteractionDate: "2026-04-10",
+   // MOCK — appUrl à brancher sur Didask App, slackChannelUrl via Slack API ou table de mapping.
+   appName: "Tasq-OM", appUrl: "https://app.didask.com/admin/organizations/1004", slackChannelUrl: null,
    onboarding:{
      track:"mentoring",
      currentStep:"Terminé",
@@ -190,6 +198,8 @@ export const DB = [
    contentCreationCount: 0, lastContentCreatedDate: "2025-09-15",
    // MOCK — sources : HubSpot Engagements (emails, calls, meetings) + Intercom (tickets) + Slack API.
    lastEmailDate: "2026-03-05", lastInteractionDate: "2026-04-26",
+   // MOCK — appUrl à brancher sur Didask App, slackChannelUrl via Slack API ou table de mapping.
+   appName: "Cap Retraite", appUrl: "https://app.didask.com/admin/organizations/1005", slackChannelUrl: null,
    onboarding:{
      track:"formation initiale",
      currentStep:"Terminé",
@@ -240,6 +250,8 @@ export const DB = [
    contentCreationCount: 25, lastContentCreatedDate: "2026-04-29",
    // MOCK — sources : HubSpot Engagements (emails, calls, meetings) + Intercom (tickets) + Slack API.
    lastEmailDate: "2026-04-28", lastInteractionDate: "2026-04-28",
+   // MOCK — appUrl à brancher sur Didask App, slackChannelUrl via Slack API ou table de mapping.
+   appName: "L'Oréal EMEA", appUrl: "https://app.didask.com/admin/organizations/1006", slackChannelUrl: "https://didask.slack.com/channels/client-loreal",
    onboarding:{
      track:"mentoring",
      currentStep:"Session 0",

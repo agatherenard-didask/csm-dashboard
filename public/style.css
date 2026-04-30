@@ -210,6 +210,12 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
 .sptot { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: var(--peach); border-radius: 10px; margin-top: 10px; }
 .sprr { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 8px; margin-bottom: 6px; background: var(--bg); }
 
+/* ── SP EXTERNAL LINKS ── */
+.sp-extlink { display: inline-flex; align-items: center; gap: 5px; padding: 7px 13px; border: 1px solid #e2e8f0; border-radius: 8px; background: var(--card); color: var(--ink60); font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; text-decoration: none; cursor: pointer; transition: all 150ms var(--ease); white-space: nowrap; }
+.sp-extlink:hover { background: #fef3ec; border-color: var(--peach); color: var(--ink); }
+.sp-extlink-dis { opacity: 0.4; cursor: not-allowed; }
+.sp-extlink-dis:hover { background: var(--card); border-color: #e2e8f0; color: var(--ink60); }
+
 /* ── SP TABS ── */
 #sp-nav { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
 .sp-tab { padding: 10px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--slate); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; margin-bottom: -1px; transition: color 150ms var(--ease), border-color 200ms var(--ease); font-family: 'DM Sans', sans-serif; white-space: nowrap; }

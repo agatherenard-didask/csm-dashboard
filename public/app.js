@@ -297,6 +297,16 @@ function openDetails(id, e) {
   document.getElementById('sp-csm').textContent = c.csm;
   document.getElementById('sp-kam').textContent = c.kam;
 
+  const _appTip = (c.appName && c.appName !== c.name) ? ` title="Ouvre ${c.appName} dans Didask App"` : '';
+  const _slackBtn = c.slackChannelUrl
+    ? `<a class="sp-extlink" href="${c.slackChannelUrl}" target="_blank" rel="noopener noreferrer">💬 Canal Slack</a>`
+    : `<span class="sp-extlink sp-extlink-dis" title="Aucun canal Slack partagé pour ce compte">💬 Canal Slack</span>`;
+  document.getElementById('sp-extlinks').innerHTML =
+    `<div class="spst" style="margin-bottom:6px;">🔗 Liens externes</div>` +
+    `<div style="display:flex;gap:8px;flex-wrap:wrap;">` +
+    `<a class="sp-extlink" href="${c.appUrl || '#'}" target="_blank" rel="noopener noreferrer"${_appTip}>🚀 Ouvrir dans l'app</a>` +
+    `${_slackBtn}</div>`;
+
   const ptc = pts => pts === 0 ? 'var(--red)' : 'var(--green)';
   const rws = [
     {lbl: 'Account Pulse',        sub: `Note: ${c.pulse}/5`,                              pts: d.pp,  mx: 20},
