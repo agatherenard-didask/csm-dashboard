@@ -195,7 +195,7 @@ function drawTable() {
   } else if (activeTab === 'exp') {
     thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('mrr')">MRR ${si2('mrr')}</th><th>Sièges</th><th>Crédits</th><th class="td-action"></th></tr>`;
   } else {
-    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th>Fin de contrat</th><th>Dernier RDV</th><th>Statut</th>${periodTh('Conversations')}${periodTh('Tickets')}<th class="td-action"></th></tr>`;
+    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th>Fin de contrat</th><th>Dernier RDV</th><th>Activité création</th><th>Statut</th>${periodTh('Conversations')}${periodTh('Tickets')}<th class="td-action"></th></tr>`;
   }
 
   const tbody = document.getElementById('tbody');
@@ -247,7 +247,12 @@ function drawTable() {
       const stagecell = `<td><span class="badge ${lcStage(c.clientStage)}">${c.clientStage}</span></td>`;
       const convcell = `<td><span style="font-size:15px;font-weight:700;color:${convCount > 0 ? 'var(--ink)' : 'var(--slate)'};">${convCount}</span></td>`;
       const tickcell = `<td><span style="font-size:15px;font-weight:700;color:${tickCount > 0 ? 'var(--ink)' : 'var(--slate)'};">${tickCount}</span></td>`;
-      row.innerHTML = namecell + teamcell + scorecell + riskcell + endcell + meetcell + stagecell + convcell + tickcell + qa_html;
+      const ccn = c.contentCreationCount ?? 0;
+      const ccColor = ccn >= 10 ? 'var(--green)' : ccn >= 3 ? 'var(--amber)' : 'var(--red)';
+      const ccDate = c.lastContentCreatedDate ? (() => { const [y,m,d] = c.lastContentCreatedDate.split('-'); return `${d}/${m}/${y}`; })() : 'Aucun contenu';
+      const cctip = `<div class="tb"><div class="tt">Activité création</div><div class="tr"><span class="tl">Dernier contenu créé</span><span class="tv">${ccDate}</span></div></div>`;
+      const cccell = `<td><div class="tw">${cctip}<div style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:15px;font-weight:700;color:${ccColor};">${ccn}</span><span style="font-size:10px;color:var(--slate);">/30j</span></div></div></td>`;
+      row.innerHTML = namecell + teamcell + scorecell + riskcell + endcell + meetcell + cccell + stagecell + convcell + tickcell + qa_html;
     }
     if (!initialRenderDone && rowIdx < 8) {
       row.classList.add('fade-in');

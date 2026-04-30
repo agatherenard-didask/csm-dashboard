@@ -16,6 +16,8 @@ export const DB = [
    seatsUsed:120, seatsContract:100, creditsUsed:450, creditsContract:500, mrr:4200, nps:72,
    // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
    clientStage:"Conception/diffusion",
+   // MOCK — à brancher sur Didask App API ou export quotidien (count + last date).
+   contentCreationCount: 22, lastContentCreatedDate: "2026-04-28",
    onboarding:{
      track:"mentoring",
      currentStep:"Atelier 3",
@@ -48,6 +50,7 @@ export const DB = [
    seatsUsed:45, seatsContract:50, creditsUsed:100, creditsContract:200, mrr:6500, nps:34,
    // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
    clientStage:"Running",
+   contentCreationCount: 2, lastContentCreatedDate: "2026-02-10",
    onboarding:{
      track:"formation initiale",
      currentStep:"Terminé",
@@ -100,6 +103,7 @@ export const DB = [
    seatsUsed:80, seatsContract:80, creditsUsed:550, creditsContract:500, mrr:2100, nps:61,
    // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
    clientStage:"Onboarding",
+   contentCreationCount: 11, lastContentCreatedDate: "2026-04-20",
    onboarding:{
      track:"formation initiale",
      currentStep:"Atelier 2",
@@ -131,6 +135,7 @@ export const DB = [
    seatsUsed:15, seatsContract:20, creditsUsed:50, creditsContract:100, mrr:800, nps:null,
    // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
    clientStage:"Running",
+   contentCreationCount: 1, lastContentCreatedDate: "2025-12-03",
    onboarding:{
      track:"mentoring",
      currentStep:"Terminé",
@@ -174,6 +179,7 @@ export const DB = [
    seatsUsed:10, seatsContract:50, creditsUsed:10, creditsContract:200, mrr:1800, nps:18,
    // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
    clientStage:"Running",
+   contentCreationCount: 0, lastContentCreatedDate: "2025-09-15",
    onboarding:{
      track:"formation initiale",
      currentStep:"Terminé",
@@ -221,6 +227,7 @@ export const DB = [
    seatsUsed:510, seatsContract:500, creditsUsed:1200, creditsContract:1000, mrr:12000, nps:81,
    // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
    clientStage:"Kick off",
+   contentCreationCount: 25, lastContentCreatedDate: "2026-04-29",
    onboarding:{
      track:"mentoring",
      currentStep:"Session 0",
