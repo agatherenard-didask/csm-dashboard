@@ -304,7 +304,7 @@ function openDetails(id, e) {
   document.getElementById('sp-extlinks').innerHTML =
     `<div class="spst" style="margin-bottom:6px;">🔗 Liens externes</div>` +
     `<div style="display:flex;gap:8px;flex-wrap:wrap;">` +
-    `<a class="sp-extlink" href="${c.appUrl || '#'}" target="_blank" rel="noopener noreferrer"${_appTip}>🚀 Ouvrir dans l'app</a>` +
+    `<a class="sp-extlink" href="${c.appUrl || '#'}" target="_blank" rel="noopener noreferrer"${_appTip}><img src="https://cdn.prod.website-files.com/6929772b32c6524a8dc1a668/694e6bbad422d65521dad91a_Vector%20(27).webp" alt="" style="height:16px;width:auto;vertical-align:middle;"> Ouvrir dans l'app</a>` +
     `${_slackBtn}</div>`;
 
   const ptc = pts => pts === 0 ? 'var(--red)' : 'var(--green)';
