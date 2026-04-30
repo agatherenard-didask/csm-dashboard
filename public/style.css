@@ -347,3 +347,24 @@ tbody tr:nth-child(even):hover td { background: var(--hover); }
 /* ── ONBOARDING COMPLETE ── */
 .ob-done-banner   { background: var(--green-bg); color: var(--green); padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; }
 .ob-done-summary  { background: var(--bg); border-radius: 10px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
+/* ── POST-TRAINING SURVEY ── */
+.ob-survey-card   { display: flex; flex-direction: column; gap: 12px; }
+.ob-survey-header { display: flex; align-items: flex-start; gap: 16px; }
+.ob-survey-score  { font-size: 36px; font-weight: 900; line-height: 1; font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; }
+.ob-survey-denom  { font-size: 14px; font-weight: 500; color: var(--slate); vertical-align: bottom; margin-left: 2px; }
+.ob-survey-meta   { display: flex; flex-direction: column; gap: 3px; padding-top: 4px; }
+.ob-survey-resp   { font-size: 12px; font-weight: 600; color: var(--ink); }
+.ob-survey-date   { font-size: 11px; color: var(--slate); }
+.ob-survey-dims   { display: flex; flex-direction: column; gap: 7px; }
+.ob-survey-dim    { display: flex; align-items: center; gap: 8px; }
+.ob-survey-dlbl   { font-size: 11px; color: var(--slate); font-weight: 500; width: 68px; flex-shrink: 0; }
+.ob-survey-dtrack { flex: 1; height: 6px; background: var(--bar-bg); border-radius: 3px; overflow: hidden; }
+.ob-survey-dfill  { height: 100%; border-radius: 3px; transition: width 400ms var(--ease); }
+.ob-survey-dval   { font-size: 11px; font-weight: 700; width: 24px; text-align: right; font-family: 'Inter', system-ui, sans-serif; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.ob-survey-verbatims { display: flex; flex-direction: column; gap: 8px; }
+.ob-verbatim      { font-size: 11px; font-style: italic; line-height: 1.55; padding: 10px 12px; border-radius: 8px; border-left: 3px solid; }
+.ob-verbatim-pos  { background: var(--green-bg); border-color: var(--green-dot); }
+.ob-verbatim-crit { background: var(--amber-bg); border-color: var(--amber-dot); }
+.ob-survey-link   { font-size: 11px; color: var(--blue); font-weight: 600; text-decoration: none; }
+.ob-survey-link:hover { text-decoration: underline; }
+.ob-survey-placeholder { font-size: 12px; color: var(--slate); background: var(--bg); border-radius: 10px; padding: 14px 16px; text-align: center; line-height: 1.6; }

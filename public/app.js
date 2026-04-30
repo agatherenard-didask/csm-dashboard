@@ -329,6 +329,35 @@ function openDetails(id, e) {
   document.getElementById('overlay').style.display = 'block';
 }
 
+function buildSurveySection(pts) {
+  if (!pts) {
+    return `<div class="ob-survey-placeholder">📮 Sondage post-formation à envoyer — réponses non encore disponibles.</div>`;
+  }
+  const scoreColor = pts.averageScore >= 8 ? 'var(--green)' : pts.averageScore >= 6 ? 'var(--amber)' : 'var(--red)';
+  const dimColor   = v => v >= 8 ? 'var(--green-dot)' : v >= 6 ? 'var(--amber-dot)' : 'var(--red-dot)';
+  const rate       = Math.round(pts.responseCount / pts.invitedCount * 100);
+  const [cy, cm, cd] = pts.completedAt.split('-');
+  const dimBar = (lbl, val) =>
+    `<div class="ob-survey-dim"><span class="ob-survey-dlbl">${lbl}</span><div class="ob-survey-dtrack"><div class="ob-survey-dfill" style="width:${val * 10}%;background:${dimColor(val)};"></div></div><span class="ob-survey-dval" style="color:${dimColor(val)};">${val}</span></div>`;
+  const verbatims = [
+    pts.verbatims?.positive ? `<div class="ob-verbatim ob-verbatim-pos">💚 <em>${pts.verbatims.positive}</em></div>` : '',
+    pts.verbatims?.critical ? `<div class="ob-verbatim ob-verbatim-crit">⚠️ <em>${pts.verbatims.critical}</em></div>` : '',
+  ].filter(Boolean).join('');
+  return `<div class="ob-survey-card">
+    <div class="spst">Satisfaction post-formation</div>
+    <div class="ob-survey-header">
+      <div><span class="ob-survey-score" style="color:${scoreColor};">${pts.averageScore}</span><span class="ob-survey-denom">/10</span></div>
+      <div class="ob-survey-meta">
+        <span class="ob-survey-resp">${pts.responseCount}/${pts.invitedCount} répondants — ${rate}% taux de réponse</span>
+        <span class="ob-survey-date">Sondage complété le ${cd}/${cm}/${cy}</span>
+      </div>
+    </div>
+    <div class="ob-survey-dims">${dimBar('Pédagogie', pts.dimensions.pedagogie)}${dimBar('Mentor', pts.dimensions.mentor)}${dimBar('Plateforme', pts.dimensions.plateforme)}${dimBar('ROI', pts.dimensions.roi)}</div>
+    ${verbatims ? `<div class="ob-survey-verbatims">${verbatims}</div>` : ''}
+    <a class="ob-survey-link" href="${pts.typeformResultsUrl}" target="_blank" rel="noopener">Voir toutes les réponses sur Typeform ↗</a>
+  </div>`;
+}
+
 function buildOnboardingPanel(c) {
   const ob = c.onboarding;
   if (!ob) return '<p class="sp-placeholder">Pas de données d\'onboarding.</p>';
@@ -357,6 +386,7 @@ function buildOnboardingPanel(c) {
         <div class="ob-date-row"><span class="ob-date-lbl">Sentiment</span><span class="badge ${sentCls}">Sentiment ${ob.mentorSentiment}/5</span></div>
       </div>
       ${mentorCard}
+      ${buildSurveySection(c.postTrainingSurvey)}
     </div>`;
   }
 
