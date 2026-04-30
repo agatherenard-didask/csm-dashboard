@@ -339,6 +339,7 @@ function openDetails(id, e) {
   setSPTab('overview');
   document.getElementById('sp').classList.add('open');
   document.getElementById('overlay').style.display = 'block';
+  document.body.style.overflow = 'hidden';
 }
 
 function buildSurveySection(pts) {
@@ -446,6 +447,7 @@ function setSPTab(tab) {
 function closeDetails() {
   document.getElementById('sp').classList.remove('open');
   document.getElementById('overlay').style.display = 'none';
+  document.body.style.overflow = '';
 }
 
 /* ─── FILTER BAR STATE ─── */
