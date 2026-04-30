@@ -34,7 +34,7 @@ function loadFromURL() {
   document.getElementById('fi-health').value = p.get('health') || '';
   document.getElementById('fi-stage').value  = p.get('stage')  || '';
   activeTab = p.get('tab') || 'all';
-  ['all', 'churn', 'renew', 'exp', 'ai'].forEach(x =>
+  ['all', 'churn', 'renew', 'exp', 'ai', 'reporting'].forEach(x =>
     document.getElementById('tab-' + x).classList.toggle('on', x === activeTab)
   );
 }
@@ -51,7 +51,7 @@ function resetFilters() {
   document.getElementById('user-select').value = '';
   document.getElementById('admin-btn').style.display = 'none';
   activeTab = 'all';
-  ['all', 'churn', 'renew', 'exp', 'ai'].forEach(x =>
+  ['all', 'churn', 'renew', 'exp', 'ai', 'reporting'].forEach(x =>
     document.getElementById('tab-' + x).classList.toggle('on', x === 'all')
   );
   history.replaceState(null, '', location.pathname);
@@ -108,16 +108,19 @@ function setSupportPeriod(val) {
 
 function setTab(t) {
   activeTab = t;
-  ['all', 'churn', 'renew', 'exp', 'ai'].forEach(x => document.getElementById('tab-' + x).classList.toggle('on', x === t));
+  ['all', 'churn', 'renew', 'exp', 'ai', 'reporting'].forEach(x => document.getElementById('tab-' + x).classList.toggle('on', x === t));
   drawTable();
 }
 
 function drawTable() {
   const isPortfolio = activeTab === 'all';
-  document.getElementById('kstrip').style.display   = isPortfolio ? '' : 'none';
-  document.getElementById('overview').style.display = isPortfolio ? '' : 'none';
+  const isReporting = activeTab === 'reporting';
+  document.getElementById('kstrip').style.display   = (isPortfolio || isReporting) ? '' : 'none';
+  document.getElementById('overview').style.display = isReporting ? '' : 'none';
+  const twrap = document.getElementById('twrap');
+  if (twrap) twrap.style.display = isReporting ? 'none' : '';
   const periodWrap = document.getElementById('support-period-wrap');
-  if (periodWrap) periodWrap.style.display = (activeTab === 'ai' || activeTab === 'exp') ? 'none' : '';
+  if (periodWrap) periodWrap.style.display = (activeTab === 'ai' || activeTab === 'exp' || isReporting) ? 'none' : '';
 
   const search = document.getElementById('si').value.toLowerCase();
   const csmF   = document.getElementById('fi-csm').value;
@@ -177,6 +180,8 @@ function drawTable() {
   document.getElementById('kp-r').textContent = reds;
   document.getElementById('kp-rp').textContent = `${Math.round(reds / DB.length * 100)}% du portefeuille`;
   document.getElementById('kp-up').textContent = ups;
+
+  if (isReporting) return;
 
   const thead = document.getElementById('thead');
   if (activeTab === 'ai') {
