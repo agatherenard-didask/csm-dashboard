@@ -1,4 +1,5 @@
 *, *::before, *::after { box-sizing: border-box; }
+:root { scroll-padding-top: calc(var(--toolbar-h, 60px) + 44px); }
 :root {
   /* Brand */
   --peach: #f9b494; --peach-h: #f49272;
@@ -93,19 +94,19 @@ body {
 
 /* ── TABLE ── */
 #twrap { max-width: 1440px; margin: 14px auto 40px; padding: 0 32px; }
-.tcrd { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow-x: auto; box-shadow: 0 1px 3px rgba(15,23,42,.04); }
+.tcrd { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow-x: clip; box-shadow: 0 1px 3px rgba(15,23,42,.04); }
 table { width: 100%; border-collapse: collapse; }
 thead tr { background: var(--bg); }
-th { padding: 11px 16px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--slate); text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; user-select: none; }
+th { padding: 11px 10px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--slate); text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; user-select: none; }
 th.s { cursor: pointer; }
 th.s:hover { color: var(--ink); }
 .td-action { text-align: right; padding-right: 24px; white-space: nowrap; min-width: 120px; }
-thead th { position: sticky; top: var(--toolbar-h, 48px); z-index: 40; background: #fafafa; box-shadow: 0 2px 6px rgba(0,0,0,.05); }
+thead th { position: sticky; top: var(--toolbar-h, 60px); z-index: 40; background: #fafafa; box-shadow: 0 2px 6px rgba(0,0,0,.05); }
 .th-period-wrap { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; white-space: nowrap; }
 .th-period { font-size: 10px; height: 22px; border: 1px solid var(--border); border-radius: 5px; background: var(--card); color: var(--slate); padding: 0 5px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 400; text-transform: none; letter-spacing: 0; max-width: 150px; }
 .th-period:focus { outline: none; border-color: var(--peach); }
 .period-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--peach); vertical-align: middle; margin-left: 4px; }
-td { padding: 20px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+td { padding: 20px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 tbody tr:last-child td { border-bottom: none; }
 tbody tr { transition: background 150ms var(--ease); cursor: pointer; }
 tbody tr:hover td { background: var(--hover); }
