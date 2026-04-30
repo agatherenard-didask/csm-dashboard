@@ -2,6 +2,7 @@ import { DB, csmWorkload } from './data.js';
 import { getScoreDetails, calcScore, getDays, getChurnRisk, calcAIAdoption } from './score.js';
 
 let activeTab = 'all', sortCol = 'score', sortAsc = false, supportPeriod = 'all';
+let initialRenderDone = false;
 
 /* Écrit l'état courant des filtres dans l'URL sans rechargement */
 function syncURL() {
@@ -127,6 +128,18 @@ function drawTable() {
   syncURL();
   updateFilterBar();
 
+  if (!initialRenderDone) {
+    document.querySelectorAll('.kcrd').forEach((el, i) => {
+      el.classList.add('fade-in');
+      el.style.animationDelay = (100 + i * 50) + 'ms';
+    });
+    ['chart-health', 'chart-churn', 'chart-csm', 'chart-workload'].forEach((id, i) => {
+      const el = document.getElementById(id).parentElement;
+      el.classList.add('fade-in');
+      el.style.animationDelay = (200 + i * 50) + 'ms';
+    });
+  }
+
   let data = DB.filter(c => c.name.toLowerCase().includes(search) && (!csmF || c.csm === csmF) && (!kamF || c.kam === kamF) && (!tierF || c.tier === tierF));
   if (hlF)    data = data.filter(c => { const s = calcScore(c); return hlF === 'g' ? s >= 70 : hlF === 'a' ? s >= 40 && s < 70 : s < 40; });
   if (stageF) data = data.filter(c => c.clientStage === stageF);
@@ -180,7 +193,7 @@ function drawTable() {
   if (!data.length) { em.style.display = 'block'; return; }
   em.style.display = 'none';
 
-  data.forEach(c => {
+  data.forEach((c, rowIdx) => {
     const d = getScoreDetails(c), s = d.tot, ro = getChurnRisk(c, s), r = ro.tot, dl = getDays(c.end);
     const scolor = sc(s), rcolor = rc(r);
     const namecell = `<td><div class="cell-name">${c.name}</div><div class="cell-sub">${c.nps != null ? `NPS · <b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'NPS · n/a'}</div></td>`;
@@ -215,6 +228,10 @@ function drawTable() {
       const convcell = `<td><span style="font-size:15px;font-weight:700;color:${convCount > 0 ? 'var(--ink)' : 'var(--slate)'};">${convCount}</span></td>`;
       const tickcell = `<td><span style="font-size:15px;font-weight:700;color:${tickCount > 0 ? 'var(--ink)' : 'var(--slate)'};">${tickCount}</span></td>`;
       row.innerHTML = namecell + teamcell + scorecell + riskcell + endcell + meetcell + stagecell + convcell + tickcell + qa_html;
+    }
+    if (!initialRenderDone && rowIdx < 8) {
+      row.classList.add('fade-in');
+      row.style.animationDelay = (300 + rowIdx * 50) + 'ms';
     }
     tbody.appendChild(row);
   });
@@ -520,8 +537,8 @@ function renderPriorities() {
   const bar = document.getElementById('pbar');
   if (!items.length) { bar.style.display = 'none'; return; }
   bar.style.display = '';
-  document.getElementById('plist').innerHTML = items.map(({ c, reason }) =>
-    `<div style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;min-width:200px;flex:1;max-width:380px;">
+  document.getElementById('plist').innerHTML = items.map(({ c, reason }, i) =>
+    `<div class="${!initialRenderDone ? 'fade-in' : ''}" style="${!initialRenderDone ? `animation-delay:${i * 50}ms;` : ''}background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;min-width:200px;flex:1;max-width:380px;">
       <div style="flex:1;min-width:0;">
         <div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.name}</div>
         <div style="font-size:11px;color:var(--slate);margin-top:2px;line-height:1.4;">${reason}</div>
@@ -576,6 +593,7 @@ if (_savedUser) {
 }
 drawTable();
 renderPriorities();
+initialRenderDone = true;
 initTooltips();
 new ResizeObserver(() => {
   document.documentElement.style.setProperty('--hdr-h', document.getElementById('hdr').offsetHeight + 'px');
