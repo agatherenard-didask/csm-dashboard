@@ -25,6 +25,9 @@ export const DB = [
      mentorSentiment:5,
      mentorNote:"Équipe très réactive, champions internes très actifs.",
    },
+   // MOCK — historique de 30 jours, à remplacer par snapshots HubSpot ou table dédiée d'historique.
+   healthScoreHistory: [75,77,75,78,80,79,82,81,83,85,84,86,87,85,88,89,87,90,91,89,92,93,95,94,96,97,96,98,99,100],
+   riskChurnHistory:   [28,26,27,25,23,24,22,21,20,18,19,17,16,15,13,14,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 2, 1, 0],
    supportConversations:[
      {date:"2026-04-15", topic:"Onboarding nouvelles équipes commerciales"},
      {date:"2026-03-02", topic:"Question droits administrateurs"},
@@ -54,6 +57,9 @@ export const DB = [
      mentorSentiment:2,
      mentorNote:"Adoption difficile malgré l'accompagnement renforcé.",
    },
+   // MOCK — historique de 30 jours, à remplacer par snapshots HubSpot ou table dédiée d'historique.
+   healthScoreHistory: [60,58,57,55,54,52,51,50,48,47,46,44,43,42,40,38,37,35,33,31,30,28,27,25,22,20,15,12, 8, 5],
+   riskChurnHistory:   [30,32,33,35,37,38,40,42,44,45,47,49,51,52,54,56,58,60,62,63,65,67,70,72,75,78,82,85,88,92],
    supportConversations:[
      {date:"2026-04-20", topic:"Relance suite baisse d'engagement"},
      {date:"2026-04-01", topic:"Point sur les objectifs Q1"},
@@ -90,6 +96,9 @@ export const DB = [
      mentorSentiment:4,
      mentorNote:"Bonne dynamique, responsables de formation très impliqués.",
    },
+   // MOCK — historique de 30 jours, à remplacer par snapshots HubSpot ou table dédiée d'historique.
+   healthScoreHistory: [70,72,71,73,75,74,76,77,78,80,79,81,82,83,85,84,86,87,86,88,89,90,91,92,91,92,93,94,94,95],
+   riskChurnHistory:   [25,24,22,23,21,20,19,18,17,15,16,14,13,12,11,10, 9,10, 8, 7, 6, 5, 6, 5, 4, 5, 4, 3, 4, 3],
    supportConversations:[
      {date:"2026-03-25", topic:"Présentation nouvelles fonctionnalités IA"},
      {date:"2026-01-14", topic:"Bilan formation managers"},
@@ -118,6 +127,9 @@ export const DB = [
      mentorSentiment:3,
      mentorNote:"Onboarding correct, engagement post-lancement à consolider.",
    },
+   // MOCK — historique de 30 jours, à remplacer par snapshots HubSpot ou table dédiée d'historique.
+   healthScoreHistory: [58,60,62,60,61,59,62,61,59,60,62,61,59,61,62,60,61,60,62,61,59,60,61,62,60,61,59,60,61,60],
+   riskChurnHistory:   [50,52,51,53,52,54,53,52,54,55,53,54,55,56,54,55,56,54,56,57,55,56,57,56,57,58,56,57,58,57],
    supportConversations:[
      {date:"2026-03-01", topic:"Point trimestriel usage"},
      {date:"2025-10-15", topic:"Configuration initiale parcours"},
@@ -146,6 +158,9 @@ export const DB = [
      mentorSentiment:1,
      mentorNote:"Fort taux d'abandon, résistance RH importante pendant l'onboarding.",
    },
+   // MOCK — historique de 30 jours, à remplacer par snapshots HubSpot ou table dédiée d'historique.
+   healthScoreHistory: [68,66,65,63,62,60,59,57,56,54,53,52,51,50,49,48,47,46,45,44,43,43,42,42,41,42,41,41,41,40],
+   riskChurnHistory:   [30,32,33,35,36,38,39,41,42,44,45,46,48,49,50,51,52,53,54,55,56,57,58,59,60,60,61,61,62,62],
    supportConversations:[
      {date:"2026-04-24", topic:"Escalade insatisfaction utilisateurs"},
      {date:"2026-03-18", topic:"Point critique engagement"},
@@ -178,6 +193,9 @@ export const DB = [
      mentorSentiment:5,
      mentorNote:"Kick off très engageant, forte mobilisation des équipes EMEA.",
    },
+   // MOCK — historique de 30 jours, à remplacer par snapshots HubSpot ou table dédiée d'historique.
+   healthScoreHistory: [60,62,63,65,67,66,68,70,71,73,74,73,75,77,78,80,81,82,84,85,86,87,89,90,92,93,94,96,98,100],
+   riskChurnHistory:   [35,33,32,30,29,27,28,26,25,23,22,21,19,18,17,15,14,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
    supportConversations:[
      {date:"2026-04-21", topic:"Préparation déploiement international"},
      {date:"2026-04-01", topic:"Bilan T1 — résultats excellents"},
