@@ -161,6 +161,12 @@ function drawTable() {
     if (sortCol === 'risk')  return sortAsc ? getChurnRisk(a, calcScore(a)).tot - getChurnRisk(b, calcScore(b)).tot : getChurnRisk(b, calcScore(b)).tot - getChurnRisk(a, calcScore(a)).tot;
     if (sortCol === 'mrr')   return sortAsc ? a.mrr - b.mrr : b.mrr - a.mrr;
     if (sortCol === 'ai')    return sortAsc ? calcAIAdoption(a).tot - calcAIAdoption(b).tot : calcAIAdoption(b).tot - calcAIAdoption(a).tot;
+    if (sortCol === 'meet')  return sortAsc ? a.meet - b.meet : b.meet - a.meet;
+    if (sortCol === 'cc')    return sortAsc ? (a.contentCreationCount ?? 0) - (b.contentCreationCount ?? 0) : (b.contentCreationCount ?? 0) - (a.contentCreationCount ?? 0);
+    if (sortCol === 'end') {
+      const p = s => { const [d,m,y] = s.split('/'); return new Date(y,m-1,d); };
+      return sortAsc ? p(a.end) - p(b.end) : p(b.end) - p(a.end);
+    }
     return 0;
   });
   updateCharts(data, csmF);
@@ -195,7 +201,7 @@ function drawTable() {
   } else if (activeTab === 'exp') {
     thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('mrr')">MRR ${si2('mrr')}</th><th>Sièges</th><th>Crédits</th><th class="td-action"></th></tr>`;
   } else {
-    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th>Fin de contrat</th><th>Dernier RDV</th><th>Activité création</th><th>Statut</th>${periodTh('Conversations')}${periodTh('Tickets')}<th class="td-action"></th></tr>`;
+    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th class="s" onclick="toggleSort('end')">Fin de contrat ${si2('end')}</th><th class="s" onclick="toggleSort('meet')">Dernier RDV ${si2('meet')}</th><th class="s" onclick="toggleSort('cc')">Activité création ${si2('cc')}</th><th>Statut</th>${periodTh('Conversations')}${periodTh('Tickets')}<th class="td-action"></th></tr>`;
   }
 
   const tbody = document.getElementById('tbody');
