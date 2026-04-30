@@ -326,10 +326,34 @@ function openDetails(id, e) {
     return `<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="font-weight:600;">${u.lbl}</span><span><b style="color:${col};">${u.u.toLocaleString('fr-FR')}</b> / ${u.ct.toLocaleString('fr-FR')} — <span style="color:${col};font-weight:700;">${p}%</span>${p > 100 ? '<span class="upsell">Upsell</span>' : ''}</span></div><div class="ubar" style="height:6px;width:100%;"><div class="ubarf" style="width:${Math.min(p,100)}%;background:${col};"></div></div></div>`;
   }).join('');
 
+  const _dAgo  = iso => iso ? Math.round((Date.now() - new Date(iso).getTime()) / 86400000) : null;
+  const _rAgo  = n => n === null ? null : n === 0 ? "aujourd'hui" : n === 1 ? 'il y a 1 jour' : `il y a ${n} jours`;
+  const _abs   = iso => { if (!iso) return ''; const [y,m,dd] = iso.split('-'); return `${dd}/${m}/${y}`; };
+  const _silC  = n => n === null ? 'var(--slate)' : n > 60 ? 'var(--red)' : n > 30 ? 'var(--amber)' : 'var(--ink)';
+  const _iType = () => {
+    const dt = c.lastInteractionDate;
+    if (!dt) return 'via interaction';
+    if (dt === c.lastEmailDate) return 'via email';
+    const ltk = (c.supportTickets || []).reduce((mx, t) => t.date > mx ? t.date : mx, '');
+    if (dt === ltk) return 'via ticket Intercom';
+    const lcv = (c.supportConversations || []).reduce((mx, t) => t.date > mx ? t.date : mx, '');
+    if (dt === lcv) return 'via conversation';
+    return 'via meeting';
+  };
+  const emailDays = _dAgo(c.lastEmailDate);
+  const intDays   = _dAgo(c.lastInteractionDate);
+  const emailVal  = c.lastEmailDate
+    ? `<span style="color:${_silC(emailDays)};font-weight:600;">${_rAgo(emailDays)}</span> <span style="color:var(--slate);font-size:11px;">${_abs(c.lastEmailDate)}</span>`
+    : `<span style="color:var(--slate);">Non disponible</span>`;
+  const intVal    = c.lastInteractionDate
+    ? `<span style="color:${_silC(intDays)};font-weight:600;">${_rAgo(intDays)}</span> <span style="color:var(--slate);font-size:11px;">${_abs(c.lastInteractionDate)} · ${_iType()}</span>`
+    : `<span style="color:var(--slate);">Non disponible</span>`;
   const relRows = [
-    {icon:'🤝', lbl:'Dernier meeting', val:`Il y a ${c.meet} jours${c.meet > d.mx ? ' <b style="color:var(--red);">(En retard)</b>' : ''}`, bg:'var(--bg)'},
-    {icon:'📅', lbl:'Prochain RDV',    val:c.next || '<b style="color:var(--red);">Non planifié ⚠</b>', bg:'#fdf6f3'},
-    {icon:'📊', lbl:'NPS',             val:c.nps != null ? `<b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'Non disponible', bg:'var(--bg)'},
+    {icon:'📧', lbl:'Dernier email',        val: emailVal,                                                                                                                                                                          bg:'var(--bg)'},
+    {icon:'🔔', lbl:'Dernière interaction',  val: intVal,                                                                                                                                                                            bg:'var(--bg)'},
+    {icon:'🤝', lbl:'Dernier meeting',       val:`Il y a ${c.meet} jours${c.meet > d.mx ? ' <b style="color:var(--red);">(En retard)</b>' : ''}`,                                                                                   bg:'var(--bg)'},
+    {icon:'📅', lbl:'Prochain RDV',          val:c.next || '<b style="color:var(--red);">Non planifié ⚠</b>',                                                                                                                       bg:'#fdf6f3'},
+    {icon:'📊', lbl:'NPS',                   val:c.nps != null ? `<b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'Non disponible',                                bg:'var(--bg)'},
   ];
   if (c.postTrainingSurvey) {
     const pts = c.postTrainingSurvey;

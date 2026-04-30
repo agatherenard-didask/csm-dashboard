@@ -18,6 +18,8 @@ export const DB = [
    clientStage:"Conception/diffusion",
    // MOCK — à brancher sur Didask App API ou export quotidien (count + last date).
    contentCreationCount: 22, lastContentCreatedDate: "2026-04-28",
+   // MOCK — sources : HubSpot Engagements (emails, calls, meetings) + Intercom (tickets) + Slack API.
+   lastEmailDate: "2026-04-22", lastInteractionDate: "2026-04-22",
    onboarding:{
      track:"mentoring",
      currentStep:"Atelier 3",
@@ -51,6 +53,8 @@ export const DB = [
    // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
    clientStage:"Running",
    contentCreationCount: 2, lastContentCreatedDate: "2026-02-10",
+   // MOCK — sources : HubSpot Engagements (emails, calls, meetings) + Intercom (tickets) + Slack API.
+   lastEmailDate: "2026-04-10", lastInteractionDate: "2026-04-22",
    onboarding:{
      track:"formation initiale",
      currentStep:"Terminé",
@@ -104,6 +108,8 @@ export const DB = [
    // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
    clientStage:"Onboarding",
    contentCreationCount: 11, lastContentCreatedDate: "2026-04-20",
+   // MOCK — sources : HubSpot Engagements (emails, calls, meetings) + Intercom (tickets) + Slack API.
+   lastEmailDate: "2026-04-18", lastInteractionDate: "2026-04-18",
    onboarding:{
      track:"formation initiale",
      currentStep:"Atelier 2",
@@ -136,6 +142,8 @@ export const DB = [
    // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
    clientStage:"Running",
    contentCreationCount: 1, lastContentCreatedDate: "2025-12-03",
+   // MOCK — sources : HubSpot Engagements (emails, calls, meetings) + Intercom (tickets) + Slack API.
+   lastEmailDate: "2026-03-15", lastInteractionDate: "2026-04-10",
    onboarding:{
      track:"mentoring",
      currentStep:"Terminé",
@@ -180,6 +188,8 @@ export const DB = [
    // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
    clientStage:"Running",
    contentCreationCount: 0, lastContentCreatedDate: "2025-09-15",
+   // MOCK — sources : HubSpot Engagements (emails, calls, meetings) + Intercom (tickets) + Slack API.
+   lastEmailDate: "2026-03-05", lastInteractionDate: "2026-04-26",
    onboarding:{
      track:"formation initiale",
      currentStep:"Terminé",
@@ -228,6 +238,8 @@ export const DB = [
    // MOCK — à brancher sur HubSpot custom property "lifecyclestage" ou équivalent
    clientStage:"Kick off",
    contentCreationCount: 25, lastContentCreatedDate: "2026-04-29",
+   // MOCK — sources : HubSpot Engagements (emails, calls, meetings) + Intercom (tickets) + Slack API.
+   lastEmailDate: "2026-04-28", lastInteractionDate: "2026-04-28",
    onboarding:{
      track:"mentoring",
      currentStep:"Session 0",
