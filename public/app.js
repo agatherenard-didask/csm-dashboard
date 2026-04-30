@@ -315,11 +315,23 @@ function openDetails(id, e) {
     return `<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="font-weight:600;">${u.lbl}</span><span><b style="color:${col};">${u.u.toLocaleString('fr-FR')}</b> / ${u.ct.toLocaleString('fr-FR')} — <span style="color:${col};font-weight:700;">${p}%</span>${p > 100 ? '<span class="upsell">Upsell</span>' : ''}</span></div><div class="ubar" style="height:6px;width:100%;"><div class="ubarf" style="width:${Math.min(p,100)}%;background:${col};"></div></div></div>`;
   }).join('');
 
-  document.getElementById('sp-relation').innerHTML = [
+  const relRows = [
     {icon:'🤝', lbl:'Dernier meeting', val:`Il y a ${c.meet} jours${c.meet > d.mx ? ' <b style="color:var(--red);">(En retard)</b>' : ''}`, bg:'var(--bg)'},
     {icon:'📅', lbl:'Prochain RDV',    val:c.next || '<b style="color:var(--red);">Non planifié ⚠</b>', bg:'#fdf6f3'},
     {icon:'📊', lbl:'NPS',             val:c.nps != null ? `<b style="color:${c.nps >= 60 ? 'var(--green)' : c.nps >= 40 ? 'var(--amber)' : 'var(--red)'};">${c.nps}</b>` : 'Non disponible', bg:'var(--bg)'},
-  ].map(rel => `<div class="sprr" style="background:${rel.bg};"><span style="font-size:12px;font-weight:600;">${rel.icon} ${rel.lbl}</span><span style="font-size:12px;">${rel.val}</span></div>`).join('');
+  ];
+  if (c.postTrainingSurvey) {
+    const pts = c.postTrainingSurvey;
+    const sColor = pts.averageScore >= 8 ? 'var(--green)' : pts.averageScore >= 6 ? 'var(--amber)' : 'var(--red)';
+    const dc = v => v >= 8 ? 'var(--green-dot)' : v >= 6 ? 'var(--amber-dot)' : 'var(--red-dot)';
+    const tipRows = [['Pédagogie', pts.dimensions.pedagogie],['Mentor', pts.dimensions.mentor],['Plateforme', pts.dimensions.plateforme],['ROI', pts.dimensions.roi]]
+      .map(([l, v]) => `<div class="tr"><span class="tl">${l}</span><span class="tv" style="color:${dc(v)};">${v}/10</span></div>`).join('');
+    relRows.push({
+      icon:'📊', lbl:'Satisfaction formation', bg:'var(--bg)',
+      val:`<span class="sp-tip-trigger" onmouseenter="showSpTip(this)" onmouseleave="hideSpTip(this)"><b style="color:${sColor};">${pts.averageScore}/10</b><div class="tb" style="border-left:4px solid ${sColor};"><div class="tt">Satisfaction post-formation</div>${tipRows}</div></span>`,
+    });
+  }
+  document.getElementById('sp-relation').innerHTML = relRows.map(rel => `<div class="sprr" style="background:${rel.bg};"><span style="font-size:12px;font-weight:600;">${rel.icon} ${rel.lbl}</span><span style="font-size:12px;">${rel.val}</span></div>`).join('');
 
   document.getElementById('sp-actions').innerHTML = ['✉️ Email','📞 Appel','📝 Note HubSpot','📋 Créer tâche','🔗 Ouvrir deal'].map(a => `<button onclick="qa('${a}','${c.name.replace(/'/g,"\\'")}',event)" style="padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .12s;" onmouseover="this.style.cssText=this.style.cssText+'background:var(--peach);color:white;border-color:var(--peach);'" onmouseout="this.style.background='var(--bg)';this.style.color='var(--ink)';this.style.borderColor='var(--line)'">${a}</button>`).join('');
 
@@ -690,6 +702,23 @@ window.addEventListener('scroll', () => {
   _toolbar.classList.toggle('scrolled', window.scrollY > 100);
 }, { passive: true });
 
+function showSpTip(el) {
+  const tb = el.querySelector('.tb');
+  if (!tb) return;
+  const rect = el.getBoundingClientRect();
+  const cx = Math.max(108, Math.min(rect.left + rect.width / 2, window.innerWidth - 108));
+  tb.style.left = cx + 'px';
+  tb.style.transform = 'translateX(-50%)';
+  tb.style.top = (rect.bottom + 8) + 'px';
+  tb.style.bottom = 'auto';
+  tb.style.visibility = 'visible';
+  tb.style.opacity = '1';
+}
+function hideSpTip(el) {
+  const tb = el.querySelector('.tb');
+  if (tb) { tb.style.visibility = 'hidden'; tb.style.opacity = '0'; }
+}
+
 window.setTab = setTab;
 window.toggleSort = toggleSort;
 window.qa = qa;
@@ -702,3 +731,5 @@ window.dismissPriority = dismissPriority;
 window.setSupportPeriod = setSupportPeriod;
 window.setSPTab = setSPTab;
 window.drawTable = drawTable;
+window.showSpTip = showSpTip;
+window.hideSpTip = hideSpTip;
