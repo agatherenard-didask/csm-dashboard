@@ -189,8 +189,17 @@ function drawTable() {
 
   const tbody = document.getElementById('tbody');
   const em = document.getElementById('empty');
+  const tcard = document.getElementById('tcard');
   tbody.innerHTML = '';
-  if (!data.length) { em.style.display = 'block'; return; }
+  if (!data.length) {
+    const hasFilters = !!(search || csmF || kamF || tierF || hlF || stageF);
+    const { icon, title, sub, showReset } = getEmptyState(hasFilters);
+    em.innerHTML = `<div class="empty-state">${icon}<p class="empty-title">${title}</p>${sub ? `<p class="empty-sub">${sub}</p>` : ''}${showReset ? '<button class="ctab" onclick="resetFilters()" style="margin-top:4px;">Réinitialiser les filtres</button>' : ''}</div>`;
+    tcard.style.display = 'none';
+    em.style.display = 'block';
+    return;
+  }
+  tcard.style.display = '';
   em.style.display = 'none';
 
   data.forEach((c, rowIdx) => {
@@ -530,6 +539,42 @@ function getPriorities() {
     }
   }
   return results;
+}
+
+const SVG_MAGNIFIER = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="13" stroke="#cbd5e1" stroke-width="2.5"/><path d="M30 30L41 41" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/><path d="M20 14v7M20 24v1" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/></svg>`;
+const SVG_CHECK     = `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="18" stroke="#a7f3d0" stroke-width="2.5"/><path d="M15 24l7 7 11-14" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+function getEmptyState(hasFilters) {
+  if (hasFilters) return {
+    icon: SVG_MAGNIFIER,
+    title: 'Aucun compte ne correspond à tes filtres',
+    sub: 'Essaie d\'élargir tes critères de recherche ou réinitialise les filtres.',
+    showReset: true,
+  };
+  if (activeTab === 'churn') return {
+    icon: SVG_CHECK,
+    title: 'Aucun compte n\'est actuellement à risque de churn 🎉',
+    sub: 'Tous tes comptes sont en bonne santé. Profites-en pour anticiper les prochains renouvellements.',
+    showReset: false,
+  };
+  if (activeTab === 'renew') return {
+    icon: SVG_MAGNIFIER,
+    title: 'Aucun renouvellement à venir dans les 120 jours',
+    sub: 'Aucun contrat n\'arrive à échéance dans les 4 prochains mois.',
+    showReset: false,
+  };
+  if (activeTab === 'exp') return {
+    icon: SVG_MAGNIFIER,
+    title: 'Aucune opportunité d\'upsell détectée pour l\'instant',
+    sub: 'Les comptes actifs sont en dessous de leurs limites contractuelles.',
+    showReset: false,
+  };
+  return {
+    icon: SVG_MAGNIFIER,
+    title: 'Aucun compte dans cette vue',
+    sub: '',
+    showReset: false,
+  };
 }
 
 function renderPriorities() {
