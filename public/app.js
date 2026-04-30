@@ -110,6 +110,21 @@ function setTab(t) {
   drawTable();
 }
 
+function drillDown(type) {
+  document.getElementById('fi-health').value = '';
+  if (type === 'g' || type === 'a' || type === 'r') {
+    document.getElementById('fi-health').value = type;
+    setTab('all');
+  } else if (type === 'churn') {
+    setTab('churn');
+  } else if (type === 'exp') {
+    setTab('exp');
+  } else {
+    setTab('all');
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 const PERIOD_OPTS = [
   ['all','Depuis le début'],['30','30 derniers jours'],['90','90 derniers jours'],
   ['180','6 derniers mois'],['meet','Depuis le dernier RDV'],
@@ -770,3 +785,4 @@ window.setSPTab = setSPTab;
 window.drawTable = drawTable;
 window.showSpTip = showSpTip;
 window.hideSpTip = hideSpTip;
+window.drillDown = drillDown;

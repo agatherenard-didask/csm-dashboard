@@ -175,11 +175,11 @@
 
 <!-- ══ KPI STRIP ══ -->
 <div id="kstrip">
-  <div class="kcrd"><div class="klbl">Comptes actifs</div><div class="kval" id="kp-tot">—</div><div class="ksub">dans le portefeuille</div></div>
-  <div class="kcrd"><div class="klbl"><span class="kdot" style="background:var(--green);"></span>Comptes sains</div><div class="kval" id="kp-g" style="color:var(--green);">—</div><div class="ksub" id="kp-gp">—</div></div>
-  <div class="kcrd"><div class="klbl"><span class="kdot" style="background:var(--amber);"></span>En vigilance</div><div class="kval" id="kp-a" style="color:var(--amber);">—</div><div class="ksub" id="kp-ap">—</div></div>
-  <div class="kcrd"><div class="klbl"><span class="kdot" style="background:var(--red);"></span>À risque de churn</div><div class="kval" id="kp-r" style="color:var(--red);">—</div><div class="ksub" id="kp-rp">—</div></div>
-  <div class="kcrd"><div class="klbl">Opportunités upsell</div><div class="kval" id="kp-up" style="color:var(--green);">—</div><div class="ksub">comptes au-dessus du contrat</div></div>
+  <div class="kcrd" onclick="drillDown('all')" tabindex="0" title="Voir tous les comptes"><div class="klbl">Comptes actifs</div><div class="kval" id="kp-tot">—</div><div class="ksub">dans le portefeuille</div></div>
+  <div class="kcrd" onclick="drillDown('g')" tabindex="0" title="Filtrer : Comptes sains (Health ≥ 70)"><div class="klbl"><span class="kdot" style="background:var(--green);"></span>Comptes sains</div><div class="kval" id="kp-g" style="color:var(--green);">—</div><div class="ksub" id="kp-gp">—</div></div>
+  <div class="kcrd" onclick="drillDown('a')" tabindex="0" title="Filtrer : En vigilance (Health 40–69)"><div class="klbl"><span class="kdot" style="background:var(--amber);"></span>En vigilance</div><div class="kval" id="kp-a" style="color:var(--amber);">—</div><div class="ksub" id="kp-ap">—</div></div>
+  <div class="kcrd" onclick="drillDown('churn')" tabindex="0" title="Voir les alertes churn"><div class="klbl"><span class="kdot" style="background:var(--red);"></span>À risque de churn</div><div class="kval" id="kp-r" style="color:var(--red);">—</div><div class="ksub" id="kp-rp">—</div></div>
+  <div class="kcrd" onclick="drillDown('exp')" tabindex="0" title="Voir les opportunités upsell"><div class="klbl">Opportunités upsell</div><div class="kval" id="kp-up" style="color:var(--green);">—</div><div class="ksub">comptes au-dessus du contrat</div></div>
 </div>
 
 <!-- ══ OVERVIEW ══ -->
