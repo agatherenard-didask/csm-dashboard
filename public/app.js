@@ -191,11 +191,11 @@ function drawTable() {
 
   const thead = document.getElementById('thead');
   if (activeTab === 'ai') {
-    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="tc">🤖 Assistant IA</th><th class="tc">🎽 Coach IA</th><th class="s tc" onclick="toggleSort('ai')">Score Adoption IA ${si2('ai')}</th><th></th></tr>`;
+    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="tc">🤖 Assistant IA</th><th class="tc">🎽 Coach IA</th><th class="s tc" onclick="toggleSort('ai')">Score Adoption IA ${si2('ai')}</th><th class="td-action"></th></tr>`;
   } else if (activeTab === 'exp') {
-    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('mrr')">MRR ${si2('mrr')}</th><th>Sièges</th><th>Crédits</th><th></th></tr>`;
+    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('mrr')">MRR ${si2('mrr')}</th><th>Sièges</th><th>Crédits</th><th class="td-action"></th></tr>`;
   } else {
-    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th>Fin de contrat</th><th>Dernier RDV</th><th>Statut</th>${periodTh('Conversations')}${periodTh('Tickets')}<th></th></tr>`;
+    thead.innerHTML = `<tr><th class="s" onclick="toggleSort('name')">Client ${si2('name')}</th><th>Tier / Équipe</th><th class="s" onclick="toggleSort('score')">Health Score ${si2('score')}</th><th class="s" onclick="toggleSort('risk')">Risque Churn ${si2('risk')}</th><th>Fin de contrat</th><th>Dernier RDV</th><th>Statut</th>${periodTh('Conversations')}${periodTh('Tickets')}<th class="td-action"></th></tr>`;
   }
 
   const tbody = document.getElementById('tbody');
@@ -222,7 +222,7 @@ function drawTable() {
     const scorecell = `<td><div class="tw" style="gap:7px;"><span class="cell-score" style="color:${scolor};">${s}</span><span style="font-size:10px;color:var(--slate);">/100</span>${tr2(c.trend)}<div class="sbar"><div class="sbarf" style="width:${s}%;background:${scolor};"></div></div>${stip}</div></td>`;
     const rtip = `<div class="tb" style="border-left:4px solid ${rc(r)};"><div class="tt">Pondération du risque</div><div class="tr"><span class="tl">Santé dégradée</span><span class="tv">${ro.hr}/60</span></div><div class="tr"><span class="tl">Urgence (${ro.dy}j restants)</span><span class="tv">${ro.tr}/40</span></div><div class="ttot"><span>Risque total</span><span class="ttot-val" style="color:${rc(r)};">${r}/100</span></div></div>`;
     const riskcell = `<td><div class="tw" style="gap:7px;"><span class="cell-score" style="color:${rcolor};">${r}</span><span style="font-size:10px;color:var(--slate);">/100</span><div class="sbar"><div class="sbarf" style="width:${r}%;background:${rcolor};"></div></div>${rtip}</div></td>`;
-    const qa_html = `<td style="text-align:right;"><button class="ctab" onclick="openDetails('${c.id}',event)">Détails →</button></td>`;
+    const qa_html = `<td class="td-action"><button class="ctab" onclick="openDetails('${c.id}',event)">Détails →</button></td>`;
     const row = document.createElement('tr');
     row.onclick = () => openDetails(c.id);
     if (activeTab === 'ai') {
